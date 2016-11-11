@@ -45,9 +45,9 @@ fi
 
 echo 'Tests found:'
 for test in $tests; do 
-	echo -e "\e[34m${test}"
+	echo -e "\033[34m${test}"
 done
-echo -e "\e[39m"; echo;
+echo -e "\033[39m"; echo;
 
 
 echo '--------------------------------------------------------------'
@@ -64,7 +64,7 @@ echo; echo;
 
 for test in $tests; do
 	echo '--------------------------------------------------------------'
-	echo -e "     test: \e[34m${test}\e[39m"
+	echo -e "     test: \033[34m${test}\033[39m"
 	echo '--------------------------------------------------------------'
 	python $test
 
@@ -76,35 +76,35 @@ for test in $tests; do
 	fi	
 done
 
-echo -e "\e[39m"
+echo -e "\033[39m"
 echo '--------------------------------------------------------------'
 echo '                 Results'
 echo '--------------------------------------------------------------'
 echo " Passed Tests:"
 for test in $(cat ./passed_tests.log); do
-    echo -e "\e[32m${test}"
+    echo -e "\033[32m${test}"
 done
-echo -e "\e[39m"
+echo -e "\033[39m"
 echo " Failed Tests:"
 for test in $(cat ./failed_tests.log); do
-    echo -e "\e[31m${test}"
+    echo -e "\033[31m${test}"
 done
-echo -e "\e[39m"
+echo -e "\033[39m"
 # If any tests failed then this script will exit with a fail exit code
 #	a pass code is exit code 0
 #	a fail code is any non-zero number 
 if [ -s ./failed_tests.log ];then
 	echo;
-	echo -e '\e[31m=============================================================='
+	echo -e '\033[31m=============================================================='
 	echo -e "	    		    FAILED"
-	echo -e '==============================================================\e[39m'
+	echo -e '==============================================================\033[39m'
 	echo 'At least one failed test, entire test failed'
 	exit -1
 else
 	
-	echo -e '\e[32m=============================================================='
+	echo -e '\033[32m=============================================================='
 	echo -e "	    		    PASSED"
-	echo -e '==============================================================\e[39m'
+	echo -e '==============================================================\033[39m'
 	echo 'All tests passed'
 fi
 
