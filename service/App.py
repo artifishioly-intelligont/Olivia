@@ -8,34 +8,22 @@ def show_endpoints():
     print "{} /".format(request.method)
     return 'Endpoints: <br>' \
            '\t/ -- List All Endpoints<br>' \
-           '\t/guess/ -- Add the new feature<br>'
+           '\t/convert -- Convert each given file a vector<br>'
 
 
-@app.route('/learn')
+@app.route('/convert')
 def learn():
-    print "{} /learn".format(request.method)
+    print "{} /convert".format(request.method)
 
     if request.method == 'GET':
-        return react.learn_get()
+        return react.convert_get()
     elif request.method == 'POST':
-        return react.learn_post()
+        return react.conver_post()
     else:
-        return react.unknown_method('/learn')
-
-
-@app.route('/guess')
-def guess():
-    print "{} /guess".format(request.method)
-
-    if request.method == 'GET':
-        return react.guess_get()
-    elif request.method == 'POST':
-        return react.guess_post()
-    else:
-        return react.unknown_method('/guess')
+        return react.unknown_method('/convert')
 
 
 if __name__ == '__main__':
-    print 'Log::App:: Starting server'
+    print 'Log::App:: Starting Olivia server'
     app.run()
     print 'Log::App:: Server closing'
