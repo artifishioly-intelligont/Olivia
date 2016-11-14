@@ -22,16 +22,16 @@ class Vectorizer:
     patch_width = None
     patch_height = None
 
-    def __init__(self, prm_path=default_prm_path, layer=-4):
+    def __init__(self, prm_path=default_prm_path, layer=-4, backend='gpu'):
         print 'Log::Vectorizer:: Initialising Vectorizer'
         self.layer = layer
 
         if not os.path.isfile(prm_path):
             raise Exception('FileNotFound: Cannot find the file %s' % prm_path)
 
-        print 'Log::Vectorizer:: Generating backend'
-        #gen_backend(batch_size=1, backend='cpu')
-        gen_backend(batch_size=32, backend='gpu')
+        print 'Log::Vectorizer:: Generating backend, backend: {}'.format(backend)
+        gen_backend(batch_size=32, backend=backend)
+
 
         print 'Log::Vectorizer:: Loading model from %s' % prm_path
         model_dict = load_obj(prm_path)
