@@ -25,9 +25,11 @@ def convert():
 
     if request.method == 'GET':
         return react.convert_get()
+
     elif request.method == 'POST':
-        
-        return react.convert_post()
+        urls = request.get_json()['urls']
+        return react.convert_post(urls)
+
     else:
         return react.unknown_method('/convert')
 

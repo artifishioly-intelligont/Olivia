@@ -30,7 +30,10 @@ class Vectorizer:
             raise Exception('FileNotFound: Cannot find the file %s' % prm_path)
 
         print 'Log::Vectorizer:: Generating backend, backend: {}'.format(backend)
-        gen_backend(batch_size=32, backend=backend)
+        cores = 32
+        if backend == 'cpu':
+            cores = 1
+        gen_backend(batch_size=cores, backend=backend)
 
 
         print 'Log::Vectorizer:: Loading model from %s' % prm_path
