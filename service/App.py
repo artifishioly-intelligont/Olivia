@@ -20,6 +20,31 @@ def convert():
     Otherwise: HTML error response
 
     Expects a set of files to be POST sent to the endpoint
+
+
+        :return:
+    example (successful) return:
+    {
+        success : True,
+        image_vectors :
+        [
+            { 'url1' : [0.1, 0.0, 0.5, ...] },
+            { 'url2' : [0.9, 1.2, 0.6, ...]}
+        ],
+        failed_images : []
+    }
+    example (failed) return:
+    {
+        success : False,
+        image_vectors :
+        [
+            { 'url1' : [0.1, 0.0, 0.5, ...] }
+        ],
+        failed_images :
+        [
+            { 'url2' : 'DownloadException: The path url2 does not exist'}
+        ]
+    }
     """
     print "{} /convert".format(request.method)
 

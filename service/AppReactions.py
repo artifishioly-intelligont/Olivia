@@ -30,6 +30,18 @@ def convert_post(urls):
         ],
         failed_images : []
     }
+    example (failed) return:
+    {
+        success : False,
+        image_vectors :
+        [
+            { 'url1' : [0.1, 0.0, 0.5, ...] }
+        ],
+        failed_images :
+        [
+            { 'url2' : 'DownloadException: The path url2 does not exist'}
+        ]
+    }
     """
     image_vectors = {}
     failed_images = {}
@@ -37,19 +49,17 @@ def convert_post(urls):
         try:
             # Download image from URL
             local_img_loc = tools.download(url)
-            print 'Downloaded image'
 
             # Convert local image to vector
             image_vectors[url] = olivia.get_attr_vec(local_img_loc)
-            print 'arr({}): {}'.format(type(image_vectors[url]), image_vectors[url])
 
-
-        except DownloadException as ex:
+        except Exception as ex:
             failed_images[url] = ex.message
-            print 'Fails: {}'.format(ex.message)
 
     success = len(failed_images) == 0
-    data = {'success': success, 'image_vectors': image_vectors, 'failed_images': failed_images}
+    data = {'success': success,
+            'image_vectors': image_vectors,
+            'failed_images': failed_images}
 
     return json.dumps(data)
 
