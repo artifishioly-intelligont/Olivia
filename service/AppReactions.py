@@ -36,11 +36,8 @@ def convert_post(urls):
     for url in urls:
         try:
             # Download image from URL
-            local_img_loc = tools.images.new_location()
-            print "img loc: "+local_img_loc
-            tools.download(url, local_img_loc)
+            local_img_loc = tools.download(url)
             print 'Downloaded image'
-
 
             # Convert local image to vector
             image_vectors[url] = olivia.get_attr_vec(local_img_loc)

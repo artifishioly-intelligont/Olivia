@@ -14,4 +14,4 @@ def get_attr_vec(img_path):
     print 'Converting image'
     vec = converter.get_attribute_vector(img_path)
     print 'Converted'
-    return vec
+    return vec.tolist()
