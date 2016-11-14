@@ -15,7 +15,9 @@ def show_endpoints():
 @app.route('/convert', methods=['GET', 'POST'])
 def convert():
     """
-    Given a file, it returns a vector representation of the image
+    POST: Given a list of URLS, it returns a vector representation of the image
+    GET: Friendly HTML error response
+    Otherwise: HTML error response
 
     Expects a set of files to be POST sent to the endpoint
     """
@@ -24,6 +26,7 @@ def convert():
     if request.method == 'GET':
         return react.convert_get()
     elif request.method == 'POST':
+        
         return react.convert_post()
     else:
         return react.unknown_method('/convert')

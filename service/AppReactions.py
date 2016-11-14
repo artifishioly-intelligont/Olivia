@@ -1,5 +1,6 @@
 import json
 import olivia
+import tools
 
 def unknown_method(endpoint):
     return "<h1>Incorrect Usage</h1> \
@@ -32,7 +33,13 @@ def convert_post(urls):
     failed_images = {}
     for url in urls:
         try:
-            image_vectors[url] = olivia.get_attr_vec(url)
+            # Download image from URL
+            local_img_loc = tools.images.new_location()
+            tools.download_image(url, local_img_loc)
+
+            # Convert local image to vector
+            image_vectors[url] = olivia.get_attr_vec(local_img_loc)
+
         except Exception as ex:
             failed_images[url] = ex.message
 

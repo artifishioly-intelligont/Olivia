@@ -2,8 +2,10 @@
 import os
 from datetime import datetime
 
+
 def get_datetime():
     return str(datetime.now().strftime('%d.%m.%Y_%H.%M.%S'))
+
 
 class ImageHandler:
     imageDir = '!Image Dir Not Set!'
@@ -26,9 +28,3 @@ class ImageHandler:
             n += 1
             new_path = '%smap__%s__%d.jpg' % (self.get_image_dir(), get_datetime(), n)
         return new_path
-
-
-
-ih = ImageHandler('some/fake/path')
-
-ih.get_image_dir()
