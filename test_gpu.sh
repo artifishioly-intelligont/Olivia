@@ -25,8 +25,7 @@ fi
 python -c "\
 import service.olivia.vectorizer as vec; \
 from os.path import expanduser as home;
-v = vec.Vectorizer(); \
-attrs = v.get_attribute_vector(home('~/SaturnServer/test_resources/test_tile.jpg'));\
+attrs = vec.converter.get_attribute_vector(home('~/SaturnServer/test_resources/test_tile.jpg'));\
 print attrs; \
 print 'done'; \
 "

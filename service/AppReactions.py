@@ -53,7 +53,7 @@ def convert_post(urls):
             # Convert local image to vector
             image_vectors[url] = olivia.get_attr_vec(local_img_loc)
 
-        except Exception as ex:
+        except (DownloadException, Exception) as ex:
             failed_images[url] = ex.message
 
     success = len(failed_images) == 0
