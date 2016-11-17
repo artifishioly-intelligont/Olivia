@@ -11,11 +11,8 @@ from neon.util.argparser import NeonArgparser
 from os.path import split, splitext, isfile
 from scipy.misc import imread, imsave
 
-
 default_prm_path = os.path.expanduser('~')+'/SaturnServer/Googlenet_791113_192patch.prm'
 
-def image_is_local(img_path):
-    return os.path.isfile(img_path)
 
 class Vectorizer:
     model = None
@@ -94,20 +91,17 @@ class Vectorizer:
 
         :param img_path_array: An array of 32 images
         :return: A dict of the paths and their respective attribute vectors
+
+        :raise GpuNotSupportedException -- This method will only work when your `self.backend == 'gpu'`
+        :raise ImageNotFound -- When at least one path in the img_path_array is invalid
+        :raise IndexError -- When you have more than 32 images or no images in the img_path_array
         """
         # Ensure that a cpu user is not accessing a GPU command
         if self.backend is not 'gpu':
             raise GpuNotSupportedException(self.backend)
 
-        # Ensure all paths pass
-        faulty_paths = []
-        for img_path in img_path_array:
-            if not image_is_local(img_path):
-                faulty_paths.append(img_path)
-
-        if len(faulty_paths) > 0:
-                print "Faulty Paths: {}".format(faulty_paths)
-                raise ImageNotFound(faulty_paths)
+        # Raise any necessary exceptions
+        image_path_checks(img_path_array)
 
         # make an image buffer on host, pad out to batch size
         host_buf = np.zeros((3 * self.patch_height * self.patch_width, self.model.be.bsz))
@@ -189,3 +183,31 @@ class ImageNotFound(Exception):
             str_paths += str(path)+os.linesep
         super(ImageNotFound, self).__init__(
             "File(s) Not Found: The following images do not exist{}{}".format(os.linesep, str_paths))
+
+
+def image_path_checks(img_path_array):
+    """ Ensure the img_path_array is usable
+
+        :raise GpuNotSupportedException -- This method will only work when your `self.backend == 'gpu'`
+        :raise ImageNotFound -- When at least one path in the img_path_array is invalid
+        :raise IndexError -- When you have more than 32 images or no images in the img_path_array
+    """
+    # Ensure all paths pass
+    faulty_paths = []
+    for img_path in img_path_array:
+        if not image_is_local(img_path):
+            faulty_paths.append(img_path)
+
+    if len(faulty_paths) > 0:
+        print "Faulty Paths: {}".format(faulty_paths)
+        raise ImageNotFound(faulty_paths)
+
+    if len(img_path_array) > 32:
+        raise IndexError('More than 32 images were passed')
+    elif len(img_path_array) == 0:
+        raise IndexError('No image paths were given')
+
+def image_is_local(img_path):
+    return os.path.isfile(img_path)
+
+
