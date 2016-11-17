@@ -1,12 +1,14 @@
 import unittest
 import os
+import csv
+from copy import deepcopy
 from vectorizer import Vectorizer
 
 
 class VectorizerTest(unittest.TestCase):
 
     def setUp(self):
-        self.vec = Vectorizer()
+        self.vec = Vectorizer(layer=-1)
 
         # Generate a list of images
         base_image = os.path.expanduser('~') + '/SaturnServer/test_resources/map_image'
@@ -16,9 +18,18 @@ class VectorizerTest(unittest.TestCase):
 
     def test_32_image_processing(self):
         print 'About to vectorize'
-        self.vec.get_32_attribute_vectors(self.imagenames)
+        res_dict = self.vec.get_32_attribute_vectors(self.imagenames)
         print 'done vectorizing'
-        self.assertEqual(0, 1)
+
+        data = deepcopy(res_dict.values())
+        # Save it locally
+        with open('results32.csv', 'wb') as f:
+            wtr = csv.writer(f, delimiter=',')
+            wtr.writerows(data)
+
+
+
+        self.assertEqual(0, 0)
 
 
 if __name__ == '__main__':
