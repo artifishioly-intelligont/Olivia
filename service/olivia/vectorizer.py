@@ -105,8 +105,7 @@ class Vectorizer:
             if not image_is_local(img_path):
                 faulty_paths.append(img_path)
 
-        # IF empty list
-        if not faulty_paths:
+        if len(faulty_paths) > 0:
                 print "Faulty Paths: {}".format(faulty_paths)
                 raise ImageNotFound(faulty_paths)
 
