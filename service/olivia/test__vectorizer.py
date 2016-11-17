@@ -36,7 +36,7 @@ class VectorizerTest(unittest.TestCase):
         layer_under_test = -4
 
         # AND a vectorizer that uses that layer
-        vec = Vectorizer(layer=layer_under_test, prm_path=default_prm_path)
+        vec = Vectorizer(layer=layer_under_test, prm_path=default_prm_path, backend='cpu')
 
         # AND an expected output stored in a file
         expected_output_file_path = os.path.expanduser('~')+'/SaturnServer/test_resources/layer4results.txt'
