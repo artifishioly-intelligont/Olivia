@@ -21,8 +21,10 @@ class VectorizerTest(unittest.TestCase):
         res_dict = self.vec.get_32_attribute_vectors(self.imagenames)
         print 'done vectorizing, results'
         print '------'
+	i = 1
         for vec in res_dict.values():
-            print vec
+            print "map_image{}- {}".format(i,vec)
+	    i += 1
         print '------'
 
 
