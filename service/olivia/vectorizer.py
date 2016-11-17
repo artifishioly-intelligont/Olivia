@@ -133,7 +133,7 @@ class Vectorizer:
         # Print the activations of the 4th layer from the end of the model
         # Note 1: model.layers represents a SingleOutputTree when using GoogLeNet;
         # during inference only the main branch (index 0) outputs are considered
-        img_vector_dict = []
+        img_vector_dict = {}
         for img_index in range(len(img_path_array)):
             img_path = img_path_array[img_index]
             img_vect = self.model.layers.layers[0].layers[self.layer].outputs.asnumpyarray()[:, img_index]
