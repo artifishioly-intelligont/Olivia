@@ -106,6 +106,7 @@ class Vectorizer:
                 faulty_paths.append(img_path)
 
         if faulty_paths is not []:
+                print "Faulty Paths: {}".format(faulty_paths)
                 raise ImageNotFound(faulty_paths)
 
         # make an image buffer on host, pad out to batch size
