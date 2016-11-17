@@ -25,7 +25,7 @@ echo '=============================================================='
 echo '--------------------------------------------------------------'
 echo '          Copying test_resources to local area'
 echo '--------------------------------------------------------------'
-for file in ./test_resources/; do
+for file in ./test_resources/*; do
     cp $file ~/SaturnServer/test_resources/
 done
 echo 'All copied'
