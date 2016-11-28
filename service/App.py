@@ -68,7 +68,7 @@ def convert():
 def handleFailure(message, urls):
     failed_images = {}
     for url in urls:
-        failed_images[url] = ex.message
+        failed_images[url] = message
     data = {'success' : False,
             'image_vectors': {},
             'failed_images' : failed_images}
