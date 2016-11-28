@@ -53,16 +53,19 @@ def convert():
         return react.convert_get()
 
     elif request.method == 'POST':
-        urls = request.get_json()['urls']
+        try:
+            urls = request.get_json()['urls']
+        except TypeError:
+            return handleFailure('JSON not provided', urls)
         try:
             return react.convert_post(urls)
         except (Exception, BaseException) as ex:
-            return handleFailure(ex, urls)
+            return handleFailure(ex.message, urls)
     else:
         return react.unknown_method('/convert')
 
 
-def handleFailure(ex, urls):
+def handleFailure(message, urls):
     failed_images = {}
     for url in urls:
         failed_images[url] = ex.message
