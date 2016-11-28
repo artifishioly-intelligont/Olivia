@@ -61,5 +61,5 @@ def convert():
 
 if __name__ == '__main__':
     print 'Log::App:: Starting Olivia server'
-    app.run()
+    app.run(port=5001)
     print 'Log::App:: Server closing'
