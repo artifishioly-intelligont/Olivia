@@ -81,7 +81,7 @@ def convert_post(urls):
             remote_url = local_urls_to_remote_urls[failed_local_url]
             failed_remote_urls[remote_url] = error
 
-    success = len(vectorized_remote_urls) == 0
+    success = len(failed_remote_urls) == 0
     data = {'success': success,
             'image_vectors': vectorized_remote_urls,
             'failed_images': failed_remote_urls}
