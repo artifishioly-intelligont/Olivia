@@ -53,15 +53,14 @@ def convert():
         return react.convert_get()
 
     elif request.method == 'POST':
-        print 'yo yo'
         urls = request.get_json()['urls']
-        print 'pooo'
         try:
             return react.convert_post(urls)
         except (Exception, BaseException) as ex:
             return handleFailure(ex, urls)
     else:
         return react.unknown_method('/convert')
+
 
 def handleFailure(ex, urls):
     failed_images = {}
