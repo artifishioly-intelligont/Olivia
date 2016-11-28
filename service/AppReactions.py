@@ -45,7 +45,7 @@ def convert_post(urls):
     """
     # Download all the images
     vectorized_remote_urls= {}
-    local_urls_to_remote_urls, failed_remote_urls = download_all_images()
+    local_urls_to_remote_urls, failed_remote_urls = download_all_images(urls)
 
     # Ensure we have at least 1 image to process
     if len(local_urls_to_remote_urls) == 0:

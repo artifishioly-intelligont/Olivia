@@ -24,8 +24,10 @@ class VectorizerTest(unittest.TestCase):
         self.assertEqual(len(failed_imgs), 0, "There should be no failed images")
         print 'done vectorizing, results'
         print '------'
+	i = 1
         for vec in res_dict.values():
-            print vec
+            print "map_image{}- {}".format(i,vec)
+	    i += 1
         print '------'
 
 
