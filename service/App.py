@@ -56,7 +56,7 @@ def convert():
         try:
             urls = request.get_json()['urls']
         except TypeError:
-            return handleFailure('JSON not provided', urls)
+            return json.dumps({'success': False, 'message': 'JSON data not provided'})
         try:
             return react.convert_post(urls)
         except (Exception, BaseException) as ex:
