@@ -1,5 +1,6 @@
 from flask import Flask, request
 import AppReactions as react
+import json
 
 app = Flask(__name__)
 
@@ -52,11 +53,24 @@ def convert():
         return react.convert_get()
 
     elif request.method == 'POST':
+        print 'yo yo'
         urls = request.get_json()['urls']
-        return react.convert_post(urls)
-
+        print 'pooo'
+        try:
+            return react.convert_post(urls)
+        except (Exception, BaseException) as ex:
+            return handleFailure(ex, urls)
     else:
         return react.unknown_method('/convert')
+
+def handleFailure(ex, urls):
+    failed_images = {}
+    for url in urls:
+        failed_images[url] = ex.message
+    data = {'success' : False,
+            'image_vectors': {},
+            'failed_images' : failed_images}
+    return json.dumps(data)
 
 
 if __name__ == '__main__':
