@@ -11,11 +11,8 @@ from neon.util.argparser import NeonArgparser
 from os.path import split, splitext, isfile
 from scipy.misc import imread, imsave
 
-
 default_prm_path = os.path.expanduser('~')+'/SaturnServer/Googlenet_791113_192patch.prm'
 
-def image_is_local(img_path):
-    return os.path.isfile(img_path)
 
 class Vectorizer:
     model = None
@@ -94,26 +91,20 @@ class Vectorizer:
 
         :param img_path_array: An array of 32 images
         :return: A dict of the paths and their respective attribute vectors
+
+        :raise GpuNotSupportedException -- This method will only work when your `self.backend == 'gpu'`
         """
         # Ensure that a cpu user is not accessing a GPU command
         if self.backend is not 'gpu':
             raise GpuNotSupportedException(self.backend)
 
-        # Ensure all paths pass
-        faulty_paths = []
-        for img_path in img_path_array:
-            if not image_is_local(img_path):
-                faulty_paths.append(img_path)
-
-        if len(faulty_paths) > 0:
-                print "Faulty Paths: {}".format(faulty_paths)
-                raise ImageNotFound(faulty_paths)
+        imgs_to_process, failed_images = get_images_to_process(img_path_array)
 
         # make an image buffer on host, pad out to batch size
         host_buf = np.zeros((3 * self.patch_height * self.patch_width, self.model.be.bsz))
 
-        for img_index in range(len(img_path_array)):
-            im = imread(img_path_array[img_index]).astype(float)
+        for img_index in range(len(imgs_to_process)):
+            im = imread(imgs_to_process[img_index]).astype(float)
 
             # Fix the image into a flat array organised as [RRRRR..GGGGG..BBBB]
             patch_array = self.patch_image(im)
@@ -134,11 +125,12 @@ class Vectorizer:
         # Note 1: model.layers represents a SingleOutputTree when using GoogLeNet;
         # during inference only the main branch (index 0) outputs are considered
         img_vector_dict = {}
-        for img_index in range(len(img_path_array)):
-            img_path = img_path_array[img_index]
+        for img_index in range(len(imgs_to_process)):
+            img_path = imgs_to_process[img_index]
             img_vect = self.model.layers.layers[0].layers[self.layer].outputs.asnumpyarray()[:, img_index]
             img_vector_dict[img_path] = img_vect
-        return img_vector_dict
+
+        return img_vector_dict, failed_images
 
     # Expects 256x256
     def patch_image(self, im):
@@ -176,7 +168,7 @@ class GpuNotSupportedException(Exception):
            "GpuNotSupportedException: The vectorizer has the backend '{}' not 'gpu'".format(backend))
 
 
-class ImageNotFound(Exception):
+class ImageNotFoundException(Exception):
     paths = []
 
     def __init__(self, paths):
@@ -187,5 +179,56 @@ class ImageNotFound(Exception):
         str_paths = ""
         for path in paths:
             str_paths += str(path)+os.linesep
-        super(ImageNotFound, self).__init__(
+        super(ImageNotFoundException, self).__init__(
             "File(s) Not Found: The following images do not exist{}{}".format(os.linesep, str_paths))
+
+
+def image_path_checks(img_path_array):
+    """ Ensure the img_path_array is usable
+
+        :raise GpuNotSupportedException -- This method will only work when your `self.backend == 'gpu'`
+        :raise ImageNotFound -- When at least one path in the img_path_array is invalid
+        :raise IndexError -- When you have more than 32 images or no images in the img_path_array
+    """
+    # Ensure all paths pass
+    faulty_paths = []
+    for img_path in img_path_array:
+        if not image_is_local(img_path):
+            faulty_paths.append(img_path)
+
+    if len(faulty_paths) > 0:
+        print "Faulty Paths: {}".format(faulty_paths)
+        raise ImageNotFoundException(faulty_paths)
+
+    if len(img_path_array) > 32:
+        raise IndexError('More than 32 images were passed')
+    elif len(img_path_array) == 0:
+        raise IndexError('No image paths were given')
+
+def get_images_to_process(img_path_array):
+    """
+    Keeps the first 32 images that can be found locally.
+
+    :param img_path_array:
+    :return: passed_images (array<string>) -- Up to 32 images that it can process
+     failed_images (dict<string,string>) -- The images that could not be found or excess images
+    """
+    failed_images = {}
+    local_images = []
+    for img_path in img_path_array:
+        if image_is_local(img_path):
+            local_images.append(img_path)
+        else:
+            failed_images[img_path] = 'Image not found locally'
+
+    # If there are any more than 32 images, ignore them
+    for excess_img in local_images[32:]:
+        failed_images[excess_img] = 'Skipped, more than 32 images'
+
+    return local_images[:32], failed_images
+
+
+def image_is_local(img_path):
+    return os.path.isfile(img_path)
+
+

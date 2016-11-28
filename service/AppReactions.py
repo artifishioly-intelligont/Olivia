@@ -17,7 +17,7 @@ def convert_get():
 
 def convert_post(urls):
     """
-    :param urls -- an array of urls of the images that we want to convert into vectors
+    :param urls -- an array of remote urls of the images that we want to convert into vectorsg
 
     :return:
     example (successful) return:
@@ -43,23 +43,66 @@ def convert_post(urls):
         ]
     }
     """
-    image_vectors = {}
+    # Download all the images
+    vectorized_remote_urls= {}
+    local_urls_to_remote_urls, failed_remote_urls = download_all_images()
+
+    # Ensure we have at least 1 image to process
+    if len(local_urls_to_remote_urls) == 0:
+        data = {'success': False,
+                'image_vectors': {},
+                'failed_images': failed_remote_urls}
+
+    # Batch them up in 32s
+    local_url_paths = local_urls_to_remote_urls.keys()
+    batch_size = 32
+    # no of batches = no of full batches and an extra if the remainder > 0
+    no_of_batches = len(local_url_paths)/batch_size + ((len(local_url_paths)%batch_size)>0)
+
+    # Iterate through the batches
+    for i in range(no_of_batches+1):
+        # Get a batch of 32 (or the remainder) and process them
+        startIndex = i * batch_size
+        endIndex = min((i+1)*batch_size, len(local_url_paths))
+        local_url_batch = local_url_paths[startIndex:endIndex]
+
+        # Vectorize the images at the local urls
+        vectorized_local_urls, failed_local_urls = olivia.get_all_vecs(local_url_batch)
+
+        # Update the successfully vectorized urls
+        for local_url in vectorized_local_urls:
+            vector = vectorized_local_urls[local_url]
+            remote_url = local_urls_to_remote_urls[local_url]
+            vectorized_remote_urls[remote_url] = vector
+
+        # Update the failed vectorized urls with the recently failed local urls
+        for failed_local_url in failed_local_urls:
+            error = failed_local_urls[failed_local_url]
+            remote_url = local_urls_to_remote_urls[failed_local_url]
+            failed_remote_urls[remote_url] = error
+
+    success = len(vectorized_remote_urls) == 0
+    data = {'success': success,
+            'image_vectors': vectorized_remote_urls,
+            'failed_images': failed_remote_urls}
+
+    return json.dumps(data)
+
+def download_all_images(urls):
+    """ Given a list of URLS, downloads all retrievable images and returns two dictionaries.
+
+     :returns
+     passed_images dict<string,string> -- local urls -> remote url mappings
+     failed_images dict<string,string> -- remote url -> failure message mappings
+     """
+    passed_images = {}
     failed_images = {}
     for url in urls:
         try:
-            # Download image from URL
             local_img_loc = tools.download(url)
-
-            # Convert local image to vector
-            image_vectors[url] = olivia.get_attr_vec(local_img_loc)
-
+            passed_images[local_img_loc] = url
         except (DownloadException, Exception) as ex:
             failed_images[url] = ex.message
+    return passed_images, failed_images
 
-    success = len(failed_images) == 0
-    data = {'success': success,
-            'image_vectors': image_vectors,
-            'failed_images': failed_images}
-
-    return json.dumps(data)
 
