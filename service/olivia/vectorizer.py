@@ -127,7 +127,7 @@ class Vectorizer:
         img_vector_dict = {}
         for img_index in range(len(imgs_to_process)):
             img_path = imgs_to_process[img_index]
-            img_vect = self.model.layers.layers[0].layers[self.layer].outputs.asnumpyarray()[:, img_index]
+            img_vect = self.model.layers.layers[0].layers[self.layer].outputs.asnumpyarray()[:, img_index].toList()
             img_vector_dict[img_path] = img_vect
 
         return img_vector_dict, failed_images
