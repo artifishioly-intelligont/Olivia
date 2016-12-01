@@ -15,7 +15,7 @@ def convert_get():
     <br>POST expects a number of files to be sent to it"
 
 
-def convert_post(urls):
+def convert_post_gpu(urls):
     """
     :param urls -- an array of remote urls of the images that we want to convert into vectorsg
 
@@ -49,9 +49,10 @@ def convert_post(urls):
 
     # Ensure we have at least 1 image to process
     if len(local_urls_to_remote_urls) == 0:
-        data = {'success': False,
-                'image_vectors': {},
-                'failed_images': failed_remote_urls}
+        return json.dumps(
+            {'success': False,
+             'image_vectors': {},
+             'failed_images': failed_remote_urls})
 
     # Batch them up in 32s
     local_url_paths = local_urls_to_remote_urls.keys()
