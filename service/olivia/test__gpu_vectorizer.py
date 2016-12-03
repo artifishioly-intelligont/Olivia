@@ -7,12 +7,12 @@ from vectorizer import Vectorizer
 
 class VectorizerTest(unittest.TestCase):
     def setUp(self):
-        self.vec = Vectorizer(layer=-1, backend='gpu', cores=128)
+        self.vec = Vectorizer(layer=-1, backend='gpu', cores=256)
 
         # Generate a list of images
         base_image = os.path.expanduser('~') + '/SaturnServer/test_resources/map_image'
         self.imagenames = []
-        for i in range(1, 129):
+        for i in range(1, self.vec.cores+1):
             self.imagenames.append("{}{}.jpg".format(base_image, i))
 
     def test_32_image_processing(self):
