@@ -26,7 +26,9 @@ class VectorizerTest(unittest.TestCase):
             print "map_image{}- {}".format(i, vec)
             i += 1
         print '------'
-
+        for url, issue in failed_imgs.items():
+            print "{}- {}".format(url, issue)
+        print '------'
 
         self.assertEqual(len(res_dict), len(self.imagenames),
                          "There number of outputs ({}) should match the number of inputs: {}"
