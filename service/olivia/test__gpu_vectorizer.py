@@ -14,6 +14,7 @@ class VectorizerTest(unittest.TestCase):
         self.imagenames = []
         for i in range(1, 33):
             self.imagenames.append("{}{}.jpg".format(base_image, i))
+            self.imagenames.append("{}{}.jpg".format(base_image, i))
 
     def test_32_image_processing(self):
         print 'About to vectorize'
