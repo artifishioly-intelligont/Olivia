@@ -103,6 +103,9 @@ class Vectorizer:
         imgs_to_process, failed_images = self.get_images_to_process(img_path_array)
 
         print type(self.model.be)
+        print self.model.be
+        print self.model.be.bsz
+
 
         # make an image buffer on host, pad out to batch size
         host_buf = np.zeros((3 * self.patch_height * self.patch_width, self.model.be.bsz))
