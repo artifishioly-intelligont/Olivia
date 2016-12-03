@@ -7,7 +7,7 @@ from vectorizer import Vectorizer
 
 class VectorizerTest(unittest.TestCase):
     def setUp(self):
-        self.vec = Vectorizer(layer=-1, backend='gpu', cores=64)
+        self.vec = Vectorizer(layer=-1, backend='gpu', cores=128)
 
         # Generate a list of images
         base_image = os.path.expanduser('~') + '/SaturnServer/test_resources/map_image'
