@@ -1,6 +1,7 @@
 from flask import Flask, request
 import AppReactions as react
 import json
+import olivia
 
 app = Flask(__name__)
 
@@ -58,7 +59,13 @@ def convert():
         except TypeError:
             return json.dumps({'success': False, 'message': 'JSON data not provided'})
         try:
-            return react.convert_post(urls)
+            if olivia.backend == 'gpu':
+                return react.convert_post_gpu(urls)
+            else:
+                # Stubbed response
+                return json.dumps({'success': False,
+                                   'image_vectors': {urls[0]: [0.666]*1024},
+                                   'failed_images': {url: 'This is stubbed, everything is a lie' for url in urls[1:]}})
         except (Exception, BaseException) as ex:
             return handleFailure(ex.message, urls)
     else:
