@@ -17,7 +17,7 @@ class VectorizerTest(unittest.TestCase):
 
     def test_32_image_processing(self):
         print 'About to vectorize'
-        res_dict, failed_imgs = self.vec.get_32_attribute_vectors(self.imagenames)
+        res_dict, failed_imgs = self.vec.get_batch_attribute_vectors(self.imagenames)
 
         self.assertEqual(len(res_dict), len(self.imagenames),
                          "There number of outputs ({}) should match the number of inputs: {}"

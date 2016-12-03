@@ -87,11 +87,11 @@ class Vectorizer:
         # first column
         return self.model.layers.layers[0].layers[self.layer].outputs.asnumpyarray()[:, 0]
 
-    def get_32_attribute_vectors(self, img_path_array):
+    def get_batch_attribute_vectors(self, img_path_array):
         """
-        Given you are running on a GPU, you batch process 32 images at a time.
+        Given you are running on a GPU, you batch process self.cores number of images at a time.
 
-        :param img_path_array: An array of 32 images
+        :param img_path_array: An array of self.cores number of images
         :return: A dict of the paths and their respective attribute vectors
 
         :raise GpuNotSupportedException -- This method will only work when your `self.backend == 'gpu'`
@@ -185,49 +185,27 @@ class ImageNotFoundException(Exception):
             "File(s) Not Found: The following images do not exist{}{}".format(os.linesep, str_paths))
 
 
-def image_path_checks(img_path_array):
-    """ Ensure the img_path_array is usable
+    def get_images_to_process(self, img_path_array):
+        """
+        Keeps the first self.cores number of images that can be found locally.
 
-        :raise GpuNotSupportedException -- This method will only work when your `self.backend == 'gpu'`
-        :raise ImageNotFound -- When at least one path in the img_path_array is invalid
-        :raise IndexError -- When you have more than 32 images or no images in the img_path_array
-    """
-    # Ensure all paths pass
-    faulty_paths = []
-    for img_path in img_path_array:
-        if not image_is_local(img_path):
-            faulty_paths.append(img_path)
+        :param img_path_array:
+        :return: passed_images (array<string>) -- Up to self.cores number of images that it can process
+         failed_images (dict<string,string>) -- The images that could not be found or excess images
+        """
+        failed_images = {}
+        local_images = []
+        for img_path in img_path_array:
+            if image_is_local(img_path):
+                local_images.append(img_path)
+            else:
+                failed_images[img_path] = 'Image not found locally'
 
-    if len(faulty_paths) > 0:
-        print "Faulty Paths: {}".format(faulty_paths)
-        raise ImageNotFoundException(faulty_paths)
+        # If there are any more than self.cores number of images, ignore them
+        for excess_img in local_images[self.cores:]:
+            failed_images[excess_img] = 'Skipped, more than {} images'.format(self.cores)
 
-    if len(img_path_array) > 32:
-        raise IndexError('More than 32 images were passed')
-    elif len(img_path_array) == 0:
-        raise IndexError('No image paths were given')
-
-def get_images_to_process(img_path_array):
-    """
-    Keeps the first 32 images that can be found locally.
-
-    :param img_path_array:
-    :return: passed_images (array<string>) -- Up to 32 images that it can process
-     failed_images (dict<string,string>) -- The images that could not be found or excess images
-    """
-    failed_images = {}
-    local_images = []
-    for img_path in img_path_array:
-        if image_is_local(img_path):
-            local_images.append(img_path)
-        else:
-            failed_images[img_path] = 'Image not found locally'
-
-    # If there are any more than 32 images, ignore them
-    for excess_img in local_images[32:]:
-        failed_images[excess_img] = 'Skipped, more than 32 images'
-
-    return local_images[:32], failed_images
+        return local_images[:self.cores], failed_images
 
 
 def image_is_local(img_path):

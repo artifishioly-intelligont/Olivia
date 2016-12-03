@@ -14,5 +14,6 @@ def get_attr_vec(img_path):
     vec = converter.get_attribute_vector(img_path)
     return vec.tolist()
 
+
 def get_all_vecs(img_paths):
-    return converter.get_32_attribute_vectors(img_path_array=img_paths)
+    return converter.get_batch_attribute_vectors(img_path_array=img_paths)
