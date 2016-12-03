@@ -7,7 +7,7 @@ from vectorizer import Vectorizer
 
 class VectorizerTest(unittest.TestCase):
     def setUp(self):
-        self.vec = Vectorizer(layer=-1, backend='gpu', cores=1024)
+        self.vec = Vectorizer(layer=-1, backend='gpu', cores=512)
 
         # Generate a list of images
         base_image = os.path.expanduser('~') + '/SaturnServer/test_resources/map_image'
@@ -20,11 +20,11 @@ class VectorizerTest(unittest.TestCase):
         res_dict, failed_imgs = self.vec.get_batch_attribute_vectors(self.imagenames)
 
         print 'done vectorizing, results'
-        print '------'
+        print '-[Passed Images]-----'
         for url, vec in res_dict.items():
             print "{}- {}".format(url.split("/")[-1], vec)
 
-        print '------'
+        print '-[Failed Images]-----'
         for url, issue in failed_imgs.items():
             print "{}- {}".format(url, issue)
         print '------'
