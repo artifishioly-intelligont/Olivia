@@ -54,15 +54,15 @@ def convert_post_gpu(urls):
              'image_vectors': {},
              'failed_images': failed_remote_urls})
 
-    # Batch them up in 32s
+    # Batch them up in the size stored in 'olivia.cores'
     local_url_paths = local_urls_to_remote_urls.keys()
-    batch_size = 32
+    batch_size = olivia.cores
     # no of batches = no of full batches and an extra if the remainder > 0
     no_of_batches = len(local_url_paths)/batch_size + ((len(local_url_paths)%batch_size)>0)
 
     # Iterate through the batches
     for i in range(no_of_batches+1):
-        # Get a batch of 32 (or the remainder) and process them
+        # Get a batch of 'olivia.cores' (or the remainder) and process them
         startIndex = i * batch_size
         endIndex = min((i+1)*batch_size, len(local_url_paths))
         local_url_batch = local_url_paths[startIndex:endIndex]

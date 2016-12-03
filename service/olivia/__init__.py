@@ -4,10 +4,12 @@ from vectorizer import Vectorizer
 # Determine which machine the code is running on
 # myrtle is the only machine capable of running on GPU
 backend = 'cpu'
+cores=1
 if socket.gethostname() == 'myrtle':
     backend = 'gpu'
+    cores = 512
 
-converter = Vectorizer(backend=backend)
+converter = Vectorizer(backend=backend, cores=cores)
 
 
 def get_attr_vec(img_path):
