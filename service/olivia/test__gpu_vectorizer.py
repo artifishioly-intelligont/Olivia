@@ -19,6 +19,15 @@ class VectorizerTest(unittest.TestCase):
         print 'About to vectorize'
         res_dict, failed_imgs = self.vec.get_batch_attribute_vectors(self.imagenames)
 
+        print 'done vectorizing, results'
+        print '------'
+        i = 1
+        for vec in res_dict.values():
+            print "map_image{}- {}".format(i, vec)
+            i += 1
+        print '------'
+
+
         self.assertEqual(len(res_dict), len(self.imagenames),
                          "There number of outputs ({}) should match the number of inputs: {}"
                          .format(len(res_dict),len(self.imagenames)))
