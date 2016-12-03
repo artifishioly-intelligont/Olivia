@@ -6,7 +6,6 @@ from vectorizer import Vectorizer
 
 
 class VectorizerTest(unittest.TestCase):
-
     def setUp(self):
         self.vec = Vectorizer(layer=-1)
 
@@ -24,10 +23,10 @@ class VectorizerTest(unittest.TestCase):
         self.assertEqual(len(failed_imgs), 0, "There should be no failed images")
         print 'done vectorizing, results'
         print '------'
-	i = 1
+        i = 1
         for vec in res_dict.values():
-            print "map_image{}- {}".format(i,vec)
-	    i += 1
+            print "map_image{}- {}".format(i, vec)
+            i += 1
         print '------'
 
 
