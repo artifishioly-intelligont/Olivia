@@ -100,7 +100,7 @@ class Vectorizer:
         if self.backend is not 'gpu':
             raise GpuNotSupportedException(self.backend)
 
-        imgs_to_process, failed_images = get_images_to_process(img_path_array)
+        imgs_to_process, failed_images = self.get_images_to_process(img_path_array)
 
         # make an image buffer on host, pad out to batch size
         host_buf = np.zeros((3 * self.patch_height * self.patch_width, self.model.be.bsz))
@@ -163,28 +163,6 @@ class Vectorizer:
 
         return patch_array
 
-
-class GpuNotSupportedException(Exception):
-    def __init__(self, backend):
-        super(GpuNotSupportedException, self).__init__(
-           "GpuNotSupportedException: The vectorizer has the backend '{}' not 'gpu'".format(backend))
-
-
-class ImageNotFoundException(Exception):
-    paths = []
-
-    def __init__(self, paths):
-        if paths is None or paths == []:
-            raise AttributeError("paths is empty")
-        self.paths = paths
-
-        str_paths = ""
-        for path in paths:
-            str_paths += str(path)+os.linesep
-        super(ImageNotFoundException, self).__init__(
-            "File(s) Not Found: The following images do not exist{}{}".format(os.linesep, str_paths))
-
-
     def get_images_to_process(self, img_path_array):
         """
         Keeps the first self.cores number of images that can be found locally.
@@ -206,6 +184,28 @@ class ImageNotFoundException(Exception):
             failed_images[excess_img] = 'Skipped, more than {} images'.format(self.cores)
 
         return local_images[:self.cores], failed_images
+
+
+class GpuNotSupportedException(Exception):
+    def __init__(self, backend):
+        super(GpuNotSupportedException, self).__init__(
+           "GpuNotSupportedException: The vectorizer has the backend '{}' not 'gpu'".format(backend))
+
+
+class ImageNotFoundException(Exception):
+    paths = []
+
+    def __init__(self, paths):
+        if paths is None or paths == []:
+            raise AttributeError("paths is empty")
+        self.paths = paths
+
+        str_paths = ""
+        for path in paths:
+            str_paths += str(path)+os.linesep
+        super(ImageNotFoundException, self).__init__(
+            "File(s) Not Found: The following images do not exist{}{}".format(os.linesep, str_paths))
+
 
 
 def image_is_local(img_path):
