@@ -12,8 +12,7 @@ class VectorizerTest(unittest.TestCase):
         # Generate a list of images
         base_image = os.path.expanduser('~') + '/SaturnServer/test_resources/map_image'
         self.imagenames = []
-        for i in range(1, 33):
-            self.imagenames.append("{}{}.jpg".format(base_image, i))
+        for i in range(1, 65g):
             self.imagenames.append("{}{}.jpg".format(base_image, i))
 
     def test_32_image_processing(self):
