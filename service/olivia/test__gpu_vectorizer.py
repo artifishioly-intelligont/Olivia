@@ -26,7 +26,7 @@ class VectorizerTest(unittest.TestCase):
 
         print '------'
         for url, issue in failed_imgs.items():
-            print "{}- {}".format(url.split("/")[-1], issue)
+            print "{}- {}".format(url, issue)
         print '------'
 
         self.assertEqual(len(res_dict), len(self.imagenames),
