@@ -20,7 +20,9 @@ class VectorizerTest(unittest.TestCase):
         print 'About to vectorize'
         res_dict, failed_imgs = self.vec.get_32_attribute_vectors(self.imagenames)
 
-        self.assertEqual(len(res_dict), len(self.imagenames), "There should be no failed images")
+        self.assertEqual(len(res_dict), len(self.imagenames),
+                         "There number of outputs ({}) should match the number of inputs: {}"
+                         .format(len(res_dict),len(self.imagenames)))
         self.assertEqual(len(failed_imgs), 0, "There should be no failed images")
         print 'done vectorizing, results'
         print '------'
