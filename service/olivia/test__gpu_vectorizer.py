@@ -21,13 +21,12 @@ class VectorizerTest(unittest.TestCase):
 
         print 'done vectorizing, results'
         print '------'
-        i = 1
-        for vec in res_dict.values():
-            print "map_image{}- {}".format(i, vec)
-            i += 1
+        for url, vec in res_dict.items():
+            print "{}- {}".format(url.split("/")[-1], vec)
+
         print '------'
         for url, issue in failed_imgs.items():
-            print "{}- {}".format(url, issue)
+            print "{}- {}".format(url.split("/")[-1], issue)
         print '------'
 
         self.assertEqual(len(res_dict), len(self.imagenames),
