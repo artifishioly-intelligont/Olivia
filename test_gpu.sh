@@ -27,6 +27,8 @@ import service.olivia as oli; \
 from os.path import expanduser as home;
 attrs = oli.converter.get_attribute_vector(home('~/SaturnServer/test_resources/test_tile_x2.jpg'));\
 print attrs; \
+attrs2 = oli.converter.get_attribute_vector(home('~/SaturnServer/test_resources/test_tile_x2.jpg'));\
+print attrs2;
 print 'done'; \
 "
 
