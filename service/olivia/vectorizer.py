@@ -20,7 +20,6 @@ class Vectorizer:
     patch_width = None
     patch_height = None
     backend = None
-
     cores = None
 
     def __init__(self, prm_path=default_prm_path, layer=-4, backend='gpu', cores=32):
@@ -99,6 +98,8 @@ class Vectorizer:
         # Ensure that a cpu user is not accessing a GPU command
         if self.backend is not 'gpu':
             raise GpuNotSupportedException(self.backend)
+
+        gen_backend(batch_size=self.cores, backend=self.backend)
 
         imgs_to_process, failed_images = self.get_images_to_process(img_path_array)
 
