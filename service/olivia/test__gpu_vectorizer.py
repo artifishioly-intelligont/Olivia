@@ -40,6 +40,32 @@ class VectorizerTest(unittest.TestCase):
             print "map_image{}- {}".format(i, vec)
             i += 1
         print '------'
+        
+    def test_NSEW(self):
+        vec = Vectorizer(prm_path=default_prm_path, backend='gpu')
+        
+        test_img_locs = ["../../test_resources/NSEW_test_img_1.jpg", "../../test_resources/NSEW_test_img_1.jpg"]
+        
+        for img in test_img_locs:
+            print os.path.isfile(img)
+        
+        print "Determining regular output"
+        
+        regular_output = vec.get_attribute_vector(test_img_locs)
+        
+        print "Regular output: "
+        print regular_output[0:3]
+        
+        print "Now getting NSEW output"
+        NSEW_output, failed_images = vec.get_NSEW_batch_attribute_vectors(test_img_locs)
+        print "NSEW output received. Checking corners"
+        
+        for name, vec in NSEW_output:
+            print name
+            
+        print failed_images
+
+        self.assertEqual(True, True)
 
 
 if __name__ == '__main__':
