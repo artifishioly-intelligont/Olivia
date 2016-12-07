@@ -15,9 +15,10 @@ def convert_get():
     <br>POST expects a number of files to be sent to it"
 
 
-def convert_post_gpu(urls):
+def convert_post_gpu(urls, nsew_mode=False):
     """
     :param urls -- an array of remote urls of the images that we want to convert into vectorsg
+    :param nsew_mode -- Extract 9 vectors from one image
 
     :return:
     example (successful) return:
@@ -44,7 +45,7 @@ def convert_post_gpu(urls):
     }
     """
     # Download all the images
-    vectorized_remote_urls= {}
+    vectorized_remote_urls = {}
     local_urls_to_remote_urls, failed_remote_urls = download_all_images(urls)
 
     # Ensure we have at least 1 image to process
@@ -56,7 +57,11 @@ def convert_post_gpu(urls):
 
     # Batch them up in the size stored in 'olivia.cores'
     local_url_paths = local_urls_to_remote_urls.keys()
-    batch_size = olivia.cores
+    if nsew_mode:
+        batch_size = olivia.cores/9
+    else:
+        batch_size = olivia.cores
+
     # no of batches = no of full batches and an extra if the remainder > 0
     no_of_batches = len(local_url_paths)/batch_size + ((len(local_url_paths)%batch_size)>0)
 
@@ -68,13 +73,23 @@ def convert_post_gpu(urls):
         local_url_batch = local_url_paths[startIndex:endIndex]
 
         # Vectorize the images at the local urls
-        vectorized_local_urls, failed_local_urls = olivia.get_all_vecs(local_url_batch)
+        if nsew_mode:
+            vectorized_local_urls, failed_local_urls = olivia.get_vecs_with_NSEW(local_url_batch)
+            # Update the successfully vectorized urls
+            for local_url_with_direction in vectorized_local_urls:
+                local_url = local_url_with_direction.split("#")[0]
+                direction = local_url_with_direction.split("#")[1]
 
-        # Update the successfully vectorized urls
-        for local_url in vectorized_local_urls:
-            vector = vectorized_local_urls[local_url]
-            remote_url = local_urls_to_remote_urls[local_url]
-            vectorized_remote_urls[remote_url] = vector
+                vector = vectorized_local_urls[local_url_with_direction]
+                remote_url = "{}#{}".format(local_urls_to_remote_urls[local_url], direction)
+                vectorized_remote_urls[remote_url] = vector
+        else:
+            vectorized_local_urls, failed_local_urls = olivia.get_all_vecs(local_url_batch)
+            # Update the successfully vectorized urls
+            for local_url in vectorized_local_urls:
+                vector = vectorized_local_urls[local_url]
+                remote_url = local_urls_to_remote_urls[local_url]
+                vectorized_remote_urls[remote_url] = vector
 
         # Update the failed vectorized urls with the recently failed local urls
         for failed_local_url in failed_local_urls:

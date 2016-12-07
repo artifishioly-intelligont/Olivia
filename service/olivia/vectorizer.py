@@ -261,8 +261,8 @@ class Vectorizer:
                    }
         patch_array_dict = {}
         for direction, coord in factors.items():
-            top = coord[0]
-            left = coord[1]
+            top = coord[1]
+            left = coord[0]
             bottom = top + self.patch_height
             right = left + self.patch_width
 

@@ -19,3 +19,7 @@ def get_attr_vec(img_path):
 
 def get_all_vecs(img_paths):
     return converter.get_batch_attribute_vectors(img_path_array=img_paths)
+
+
+def get_vecs_with_NSEW(img_paths):
+    return converter.get_NSEW_batch_attribute_vectors(img_path_array=img_paths)
