@@ -99,8 +99,6 @@ class Vectorizer:
         if self.backend is not 'gpu':
             raise GpuNotSupportedException(self.backend)
 
-        gen_backend(batch_size=self.cores, backend=self.backend)
-
         imgs_to_process, failed_images = self.get_images_to_process(img_path_array)
 
         # make an image buffer on host, pad out to batch size
