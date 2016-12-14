@@ -26,8 +26,8 @@ class Retainer:
                 for row in csvread:
                     vecs = []
                     for val in row[1:]:
-                        vecs.append(float(val))
-                    self.ids_to_vectors[float(row[0])] = float(vecs)
+                        vecs.append(val)
+                    self.ids_to_vectors[row[0]] = vecs
                     
             self.update_map_to_image_ids()
 
