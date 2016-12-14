@@ -34,23 +34,27 @@ class Retainer:
             
         except IOError:
             open(seed_csv, 'a')
-            print "Creating file '" + seed_csv + "'"        
+            print "Creating file '" + seed_csv + "'"                
+        
+        
+    def seen_image(id):
+        map_id = id.split("_")[0]
+        
+        if map_id in map_to_image_ids.keys():
+            return id in map_to_image_ids[map_id]
+        else:
+            return False
 
-    
-    def seen_image(image_id):
-        return False
-
-    def seen_map(map_id):
-        return False
+            
+    def remember_map(id):
+        pass
 
 
     def remember(image_id,attr_vector):
         pass
 
-
     def clear():
         pass
-
 
     def remove(map_id):
         pass
