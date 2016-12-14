@@ -1,5 +1,6 @@
 from flask import Flask, request
-import AppReactions as react
+import AppConvertReactions as react
+import AppDownloadReactions as downloadReact
 import json
 import olivia
 import traceback
@@ -145,6 +146,22 @@ def nsew_convert():
             return handleFailure(ex.message, urls)
     else:
         return react.unknown_method('/convert/nsew')
+
+@app.route('/download', methods=['GET','POST'])
+def download():
+    print "{} /download".format(request.method)
+
+    if request.method == 'GET':
+        return downloadReact.download_get()
+
+    elif request.method == 'POST':
+        urls = request.get_json()['urls']
+        ids = request.get_json()['ids']
+
+        return downloadReact.download_post(urls, ids)
+    else:
+        return react.unknown_method('/convert')
+
 
 
 def handleFailure(message, urls):
