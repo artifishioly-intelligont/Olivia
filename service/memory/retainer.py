@@ -87,11 +87,10 @@ class Retainer:
         try:
             with open(self.csv_file, 'wb') as f:
                 wtr = csv.writer(f, delimiter= ',')
-                wtr.writerows(izip(ids, vecs))
+                wtr.writerows([[ids[index], vecs[index]] for index in range(len(ids))])
         except IOError:
             print "Could not open csv file to save data"
 
-            
     def __del__(self):
         self.save()
 
@@ -107,9 +106,4 @@ if __name__ == "__main__":
     print r.map_to_image_ids
     
     r.save()
-    
-    print "--"
-    r.save()
-
-        
-    
+    print "----"
