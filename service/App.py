@@ -2,6 +2,7 @@ from flask import Flask, request
 import AppReactions as react
 import json
 import olivia
+import traceback
 
 app = Flask(__name__)
 
@@ -67,8 +68,7 @@ def convert():
                                    'image_vectors': {urls[0]: [0.666]*1024},
                                    'failed_images': {url: 'This is stubbed, everything is a lie' for url in urls[1:]}})
         except (Exception, BaseException) as ex:
-	    import traceback
-	    traceback.print_exc()
+    	    traceback.print_exc()
             return handleFailure(ex.message, urls)
     else:
         return react.unknown_method('/convert')

@@ -21,6 +21,7 @@ class Vectorizer:
     patch_height = None
     backend = None
     cores = None
+    generated_backend_object= None
 
     def __init__(self, prm_path=default_prm_path, layer=-4, backend='gpu', cores=32):
         print 'Log::Vectorizer:: Initialising Vectorizer'
@@ -33,7 +34,7 @@ class Vectorizer:
         if backend == 'cpu':
             cores = 1
         self.cores = cores
-        gen_backend(batch_size=self.cores, backend=backend)
+        self.generated_backend_object = gen_backend(batch_size=self.cores, backend=backend)
         self.backend = backend
 
         print 'Log::Vectorizer:: Loading model from %s' % prm_path
@@ -344,3 +345,4 @@ class ImageNotFoundException(Exception):
 
 def image_is_local(img_path):
     return os.path.isfile(img_path)
+
