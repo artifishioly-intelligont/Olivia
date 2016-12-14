@@ -1,4 +1,5 @@
 import retention
+from url_decoder import decode_url_sent_from_gui, is_url_from_gui
 
 vectorized_images, map_to_image_ids = retention.populate()
 
