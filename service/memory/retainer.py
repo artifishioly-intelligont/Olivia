@@ -64,7 +64,7 @@ class Retainer:
         
 
     def remove(self, map_id):
-        del self.ids_to_vectors[map_to_image_ids[map_id]]
+        del self.ids_to_vectors[self.map_to_image_ids[map_id]]
         del self.map_to_image_ids[map_id]
         
         
