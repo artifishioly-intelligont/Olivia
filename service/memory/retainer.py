@@ -17,7 +17,7 @@ class Retainer:
         try:
             # Populate ids_to_vectors ids and attribute vectors from the csv file
             with open(seed_csv) as myfile:
-                csvread = csv.reader(myfile)
+                csvread = self.csv.reader(myfile)
                 for row in csvread:
                     vecs = []
                     for val in row[1:]:
@@ -25,19 +25,15 @@ class Retainer:
                     self.ids_to_vectors[float(row[0])] = float(vecs)
                     
             # Populate the map_to_image_ids from the 
-            for image_id in ids_to_vectors.keys():
-                map_id = image_id.split("_")[0]
-                if map_id in map_to_image_ids:
-                    map_to_image_ids[map_id].append(image_id)
-                else:
-                    map_to_image_ids = [image_id]
-            
+            for image_id in self.ids_to_vectors.keys():
+                self.remember_map(image_id)
+
         except IOError:
             open(seed_csv, 'a')
             print "Creating file '" + seed_csv + "'"                
         
         
-    def seen_image(id):
+    def seen_image(self, id):
         map_id = id.split("_")[0]
         
         if map_id in map_to_image_ids.keys():
@@ -46,17 +42,21 @@ class Retainer:
             return False
 
             
-    def remember_map(id):
+    def remember(self, image_id, attr_vector):
         pass
 
 
-    def remember(image_id,attr_vector):
+    def remember_map(self, image_id):
+        map_id = image_id.split("_")[0]
+        if map_id in self.map_to_image_ids:
+            self.map_to_image_ids[map_id].append(image_id)
+        else:
+            map_to_image_ids = [image_id]
+
+    def clear(self):
         pass
 
-    def clear():
-        pass
-
-    def remove(map_id):
+    def remove(self, map_id):
         pass
 
 
