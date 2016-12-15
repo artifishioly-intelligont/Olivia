@@ -27,6 +27,7 @@ def download_post(urls, ids):
                 'failed_images': {url: e.message for url in urls}}
 
     for url, vector in passed_images.items():
+        print url, vector
         image_id = url_to_id_map[url]
         memory.remember(image_id, vector)
 
@@ -49,6 +50,5 @@ def create_ids(urls):
             decoded_id = str(-random.uniform(1000, 9999)) + \
                          "_"+str(random.uniform(1000, 9999))+"_"+str(random.uniform(1000, 9999))
         url_to_decoded_id_map[url] = decoded_id
-    print url_to_decoded_id_map
     return url_to_decoded_id_map
 
