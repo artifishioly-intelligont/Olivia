@@ -27,8 +27,8 @@ def download_post(urls, ids):
                 'failed_images': {url: e.message for url in urls}}
 
     for url, vector in passed_images.items():
-        print url, vector
         image_id = url_to_id_map[url]
+        print url, image_id, vector[0:3]
         memory.remember(image_id, vector)
 
     data = {'success': len(failed_images) == 0,
