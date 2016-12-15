@@ -22,10 +22,9 @@ def download_post(urls, ids):
         failed_images = data["failed_images"]
 
     except Exception as e:
-        data = {'success': False,
+        return {'success': False,
                 'downloaded_vectors': [],
                 'failed_images': {url: e.message for url in urls}}
-        return json.dumps(data)
 
     for url, vector in passed_images.items():
         image_id = url_to_id_map[url]
@@ -34,7 +33,7 @@ def download_post(urls, ids):
     data = {'success': len(failed_images) == 0,
             'downloaded_vectors': passed_images.keys(),
             'failed_images': failed_images}
-    return json.dumps(data)
+    return data
 
 
 def create_ids(urls):
