@@ -43,7 +43,7 @@ def create_ids(urls):
      """
     url_to_decoded_id_map = {}
     for url in urls:
-        if memory.is_url_from_gui(urls):
+        if memory.is_url_from_gui(url):
             decoded_id = memory.decode_url_sent_from_gui(url)
         else:
             # Random id
