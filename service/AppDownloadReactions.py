@@ -29,7 +29,7 @@ def download_post(urls, ids):
 
     for url, vector in passed_images.items():
         image_id = url_to_id_map[url]
-        memory.remember(image_id, vector)
+        memory.remember_vec(image_id, vector)
 
     data = {'success': len(failed_images) == 0,
             'downloaded_vectors': passed_images.keys(),
@@ -42,7 +42,7 @@ def create_ids(urls):
      An ID can be extracted from urls sent from the GUI server
      """
     url_to_decoded_id_map = {}
-    for url in url_to_decoded_id_map:
+    for url in urls:
         if memory.is_url_from_gui(urls):
             decoded_id = memory.decode_url_sent_from_gui(url)
         else:
