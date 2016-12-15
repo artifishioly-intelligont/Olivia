@@ -2,6 +2,7 @@ from flask import Flask, request
 import AppConvertReactions as react
 import AppDownloadReactions as downloadReact
 import json
+import memory
 import olivia
 import traceback
 
@@ -66,7 +67,7 @@ def convert():
             else:
                 # Stubbed response
                 return json.dumps({'success': False,
-                                   'image_vectors': {urls[0]: [0.666]*1024},
+                                   'image_vectors': {urls[0]: [0.666] * 1024},
                                    'failed_images': {url: 'This is stubbed, everything is a lie' for url in urls[1:]}})
         except (Exception, BaseException) as ex:
             traceback.print_exc()
@@ -140,7 +141,7 @@ def nsew_convert():
             else:
                 # Stubbed response
                 return json.dumps({'success': False,
-                                   'image_vectors': {urls[0]+"#"+nsew: [0.666]*1024
+                                   'image_vectors': {urls[0] + "#" + nsew: [0.666] * 1024
                                                      for nsew in ["NW", "N", "NE", "W", "mid", "E", "SW", "S", "SE"]},
                                    'failed_images': {url: 'This is stubbed, everything is a lie' for url in urls[1:]}})
         except (Exception, BaseException) as ex:
@@ -168,6 +169,29 @@ def download():
             ids = []
 
         return json.dumps(downloadReact.download_post(urls, ids))
+    else:
+        return react.unknown_method('/convert')
+
+
+@app.route('/seen', methods=['GET', 'POST'])
+def seen():
+    print "{} /seen".format(request.method)
+
+    if request.method == 'GET':
+        return downloadReact.download_get()
+
+    elif request.method == 'POST':
+        if 'urls' in request.get_json():
+            urls = request.get_json()['urls']
+
+            data = { 'seen' : {}}
+            for url in urls:
+                id = memory.decode_url_sent_from_gui(url)
+                data['seen'][url] = not not memory.get_vec(id)
+            return json.dumps(data)
+        else:
+            return json.dumps({'success': False, 'message': 'JSON data not provided'})
+
     else:
         return react.unknown_method('/convert')
 
