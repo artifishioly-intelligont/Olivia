@@ -10,10 +10,12 @@ def download_get():
 
 
 def download_post(urls, ids):
-    if ids == None or ids == "" or len(ids) == 0:
+    #Genereate the map of ids to urls
+    if len(ids) == 0:
         url_to_id_map = create_ids(urls)
     else:
         url_to_id_map = zip(urls, urls)
+
     try:
         data = react.convert_post_gpu(urls)
         passed_images = data["image_vectors"]
@@ -36,11 +38,15 @@ def download_post(urls, ids):
 
 
 def create_ids(urls):
+    """ Take a list of urls and return a list corresponding ids
+     An ID can be extracted from urls sent from the GUI server
+     """
     url_to_decoded_id_map = {}
     for url in url_to_decoded_id_map:
         if memory.is_url_from_gui(urls):
             decoded_id = memory.decode_url_sent_from_gui(url)
         else:
+            # Random id
             decoded_id = str(-random.uniform(1000, 9999)) + \
                          "_"+str(random.uniform(1000, 9999))+"_"+str(random.uniform(1000, 9999))
         url_to_decoded_id_map[url] = decoded_id
