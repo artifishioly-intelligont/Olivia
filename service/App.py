@@ -136,7 +136,7 @@ def nsew_convert():
             return json.dumps({'success': False, 'message': 'JSON data not provided'})
         try:
             if olivia.backend == 'gpu':
-                return react.convert_post_gpu(urls, True)
+                return json.dumps(react.convert_post_gpu(urls, True))
             else:
                 # Stubbed response
                 return json.dumps({'success': False,
@@ -167,7 +167,7 @@ def download():
         else:
             ids = []
 
-        return downloadReact.download_post(urls, ids)
+        return json.dumps(downloadReact.download_post(urls, ids))
     else:
         return react.unknown_method('/convert')
 

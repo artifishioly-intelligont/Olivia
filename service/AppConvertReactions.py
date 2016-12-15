@@ -50,10 +50,9 @@ def convert_post_gpu(urls, nsew_mode=False):
 
     # Ensure we have at least 1 image to process
     if len(local_urls_to_remote_urls) == 0:
-        return json.dumps(
-            {'success': False,
+        return {'success': False,
              'image_vectors': {},
-             'failed_images': failed_remote_urls})
+             'failed_images': failed_remote_urls}
 
     # Batch them up in the size stored in 'olivia.cores'
     local_url_paths = local_urls_to_remote_urls.keys()
@@ -102,7 +101,7 @@ def convert_post_gpu(urls, nsew_mode=False):
             'image_vectors': vectorized_remote_urls,
             'failed_images': failed_remote_urls}
 
-    return json.dumps(data)
+    return data
 
 def download_all_images(urls):
     """ Given a list of URLS, downloads all retrievable images and returns two dictionaries.
