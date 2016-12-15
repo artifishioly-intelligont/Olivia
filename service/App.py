@@ -187,7 +187,7 @@ def seen():
             data = { 'seen' : {}}
             for url in urls:
                 id = memory.is_url_from_gui(url)
-                data['seen'][url] = not not memory.get_vec(id)
+                data['seen'][url] = memory.get_vec(id)
             return json.dumps(data)
         else:
             return json.dumps({'success': False, 'message': 'JSON data not provided'})
