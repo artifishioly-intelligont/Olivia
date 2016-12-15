@@ -28,7 +28,7 @@ def download_post(urls, ids):
 
     for url, vector in passed_images.items():
         image_id = url_to_id_map[url]
-        memory.remember_vec(image_id, vector)
+        memory.remember(image_id, vector)
 
     data = {'success': len(failed_images) == 0,
             'downloaded_vectors': passed_images.keys(),
