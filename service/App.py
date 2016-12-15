@@ -186,7 +186,7 @@ def seen():
 
             data = { 'seen' : {}}
             for url in urls:
-                id = memory.is_url_from_gui(url)
+                id = memory.decode_url_sent_from_gui(url)
                 data['seen'][url] = memory.get_vec(id)
             return json.dumps(data)
         else:
