@@ -15,7 +15,7 @@ class Retainer:
     ids_to_vectors = {}
     map_to_image_ids = {}
 
-    def __init__(self, seed_csv=os.path.expanduser("~IDS_TO_VECTORS.csv")):
+    def __init__(self, seed_csv=os.path.expanduser("~/IDS_TO_VECTORS.csv")):
     
         self.csv_file = seed_csv
         
@@ -35,7 +35,7 @@ class Retainer:
             open(seed_csv, 'a')
             print "Creating file '" + seed_csv + "'"                
         
-        
+       
     def seen_image(self, id):
         map_id = id.split("_")[0]
         
@@ -58,6 +58,12 @@ class Retainer:
         else:
             self.map_to_image_ids[map_id] = [image_id]
             
+            
+    def update_map_to_image_ids(self):
+        # Populate the map_to_image_ids from the ids_to_vectors
+        for image_id in self.ids_to_vectors.keys():
+            self.remember_map(image_id)
+            
 
     def clear(self):
         self.ids_to_vectors = {}
@@ -71,13 +77,7 @@ class Retainer:
             del self.ids_to_vectors[id]
             
         del self.map_to_image_ids[map_id]
-        
-        
-    def update_map_to_image_ids(self):
-        # Populate the map_to_image_ids from the ids_to_vectors
-        for image_id in self.ids_to_vectors.keys():
-            self.remember_map(image_id)
-  
+          
             
     def save(self):
         data = deepcopy(self.ids_to_vectors)
