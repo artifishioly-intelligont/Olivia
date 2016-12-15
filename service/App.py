@@ -69,10 +69,11 @@ def convert():
                                    'image_vectors': {urls[0]: [0.666]*1024},
                                    'failed_images': {url: 'This is stubbed, everything is a lie' for url in urls[1:]}})
         except (Exception, BaseException) as ex:
-    	    traceback.print_exc()
+            traceback.print_exc()
             return handleFailure(ex.message, urls)
     else:
         return react.unknown_method('/convert')
+
 
 @app.route('/convert/nsew', methods=['GET', 'POST'])
 def nsew_convert():
@@ -147,7 +148,8 @@ def nsew_convert():
     else:
         return react.unknown_method('/convert/nsew')
 
-@app.route('/download', methods=['GET','POST'])
+
+@app.route('/download', methods=['GET', 'POST'])
 def download():
     print "{} /download".format(request.method)
 
@@ -155,22 +157,28 @@ def download():
         return downloadReact.download_get()
 
     elif request.method == 'POST':
-        urls = request.get_json()['urls']
-        ids = request.get_json()['ids']
+        if 'urls' in request.get_json():
+            urls = request.get_json()['urls']
+        else:
+            return json.dumps({'success': False, 'message': 'JSON data not provided'})
+
+        if 'ids' in request.get_json():
+            ids = request.get_json()['ids']
+        else:
+            ids = []
 
         return downloadReact.download_post(urls, ids)
     else:
         return react.unknown_method('/convert')
 
 
-
 def handleFailure(message, urls):
     failed_images = {}
     for url in urls:
         failed_images[url] = message
-    data = {'success' : False,
+    data = {'success': False,
             'image_vectors': {},
-            'failed_images' : failed_images}
+            'failed_images': failed_images}
     return json.dumps(data)
 
 
