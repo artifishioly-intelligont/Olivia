@@ -22,19 +22,18 @@ def download_post(urls, ids):
         failed_images = data["failed_images"]
 
     except Exception as e:
-        data = {'success': False,
+        return {'success': False,
                 'downloaded_vectors': [],
                 'failed_images': {url: e.message for url in urls}}
-        return json.dumps(data)
 
     for url, vector in passed_images.items():
         image_id = url_to_id_map[url]
-        memory.remember(image_id, vector)
+        memory.remember_vec(image_id, vector)
 
     data = {'success': len(failed_images) == 0,
             'downloaded_vectors': passed_images.keys(),
             'failed_images': failed_images}
-    return json.dumps(data)
+    return data
 
 
 def create_ids(urls):
@@ -42,8 +41,8 @@ def create_ids(urls):
      An ID can be extracted from urls sent from the GUI server
      """
     url_to_decoded_id_map = {}
-    for url in url_to_decoded_id_map:
-        if memory.is_url_from_gui(urls):
+    for url in urls:
+        if memory.is_url_from_gui(url):
             decoded_id = memory.decode_url_sent_from_gui(url)
         else:
             # Random id
