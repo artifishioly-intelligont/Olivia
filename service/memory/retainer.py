@@ -15,7 +15,7 @@ class Retainer:
     ids_to_vectors = {}
     map_to_image_ids = {}
 
-    def __init__(self, seed_csv="IDS_TO_VECTORS.csv"):
+    def __init__(self, seed_csv=os.path.expanduser("~IDS_TO_VECTORS.csv")):
     
         self.csv_file = seed_csv
         
@@ -26,7 +26,7 @@ class Retainer:
                 for row in csvread:
                     vecs = []
                     for val in row[1:]:
-                        vecs.append(val)
+                        vecs.append(float(val))
                     self.ids_to_vectors[row[0]] = vecs
                     
             self.update_map_to_image_ids()
@@ -53,7 +53,8 @@ class Retainer:
     def remember_map(self, image_id):
         map_id = image_id.split("_")[0]
         if map_id in self.map_to_image_ids:
-            self.map_to_image_ids[map_id].append(image_id)
+            if image_id not in self.map_to_image_ids[map_id]:
+                self.map_to_image_ids[map_id].append(image_id)
         else:
             self.map_to_image_ids[map_id] = [image_id]
             
@@ -63,8 +64,12 @@ class Retainer:
         self.map_to_image_ids = {}
         
 
-    def remove(self, map_id):
-        del self.ids_to_vectors[self.map_to_image_ids[map_id]]
+    def remove(self, map_id):    
+        ids = self.map_to_image_ids[map_id]
+        
+        for id in ids:
+            del self.ids_to_vectors[id]
+            
         del self.map_to_image_ids[map_id]
         
         
@@ -72,29 +77,21 @@ class Retainer:
         # Populate the map_to_image_ids from the ids_to_vectors
         for image_id in self.ids_to_vectors.keys():
             self.remember_map(image_id)
-        
-        
+  
+            
     def save(self):
-        ids = deepcopy(self.ids_to_vectors.keys())
-        vecs = deepcopy(self.ids_to_vectors.values())
-        
-        print ids
-        print vecs
-        print self.csv_file
+        data = deepcopy(self.ids_to_vectors)
         
         # Save it locally
-        # TODO - check this doesn't mess up the order!
-        try:
-            with open(self.csv_file, 'wb') as f:
-                wtr = csv.writer(f, delimiter= ',')
-                wtr.writerows([[ids[index], vecs[index]] for index in range(len(ids))])
-        except IOError:
-            print "Could not open csv file to save data"
+        with open(self.csv_file, 'wb') as f:
+            wtr = csv.writer(f, delimiter= ',')
+            for id, vec in data.items():
+                wtr.writerow([id] + list(vec))
 
     def __del__(self):
         self.save()
 
-        
+"""
 if __name__ == "__main__":
 
     r = Retainer()
@@ -102,8 +99,15 @@ if __name__ == "__main__":
     r.remember_vec('1_1_1', [0,1,2,3])
     r.remember_vec('2_2_2', [0,2,4,6])
     
-    print r.ids_to_vectors
-    print r.map_to_image_ids
+    print r.seen_image('1_1_1') == True
+    print r.seen_image('2_2_2') == True
+    print r.seen_image('3_3_3') == False
     
-    r.save()
-    print "----"
+    r.remove('1')
+    
+    print r.seen_image('1_1_1') == False
+    
+    r.clear()
+    
+    print r.seen_image('2_2_2') == False
+"""
