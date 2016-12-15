@@ -71,6 +71,7 @@ class Retainer:
     def remember_vec(self, image_id, attr_vector):
         self.ids_to_vectors[image_id] = attr_vector
         self.update_map_to_image_ids()
+        self.save()
             
     """
     :function
@@ -121,11 +122,13 @@ class Retainer:
     """
     def save(self):
         data = deepcopy(self.ids_to_vectors)
+        print data
         
         # Save it locally
         with open(self.csv_file, 'wb') as f:
             wtr = csv.writer(f, delimiter= ',')
             for id, vec in data.items():
+                print [id] + list(vec)
                 wtr.writerow([id] + list(vec))        
         
     """
@@ -175,11 +178,11 @@ if __name__ == "__main__":
     print r.get_vec('2_2_2')
     print r.get_vec('3_3_3') == False
     
-    r.remove('1')
+#    r.remove('1')
     
-    print r.seen_image('1_1_1') == False
+#    print r.seen_image('1_1_1') == False
     
-    r.clear()
+#    r.clear()
     
-    print r.seen_image('2_2_2') == False
+#    print r.seen_image('2_2_2') == False
 
