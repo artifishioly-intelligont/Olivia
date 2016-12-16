@@ -64,8 +64,14 @@ def convert():
         try:
             if olivia.backend == 'gpu':
                 result = react.convert_post_gpu(urls)
-                image_vectors = {url.split('#')[0]: vector for url, vector in result['image_vectors'] if url.split('#')[1] == 'mid'}
-                failed_images = {url.split('#')[0]: vector for url, vector in result['failed_images'] if url.split('#')[1] == 'mid'}
+                image_vectors = {url.split('#')[0]: result['image_vectors'][url]
+                                 for url, vector in result['image_vectors']
+                                 if url.split('#')[1] == 'mid'}
+
+                failed_images = {url.split('#')[0]: result['failed_images'][url]
+                                 for url, vector in result['failed_images']
+                                 if url.split('#')[1] == 'mid'}
+
                 result['image_vectors'] = image_vectors
                 result['failed_images'] = failed_images
                 return json.dumps(result)

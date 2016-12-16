@@ -27,7 +27,7 @@ def download_post(urls, ids):
                          for url in data['image_vectors'].keys()
                          if url.split('#')[1] == 'mid'}
 
-        failed_images = {url.split('#')[0]: data['image_vectors'][url]
+        failed_images = {url.split('#')[0]: data['failed_images'][url]
                          for url in data['failed_images'].keys()
                          if url.split('#')[1] == 'mid'}
 
