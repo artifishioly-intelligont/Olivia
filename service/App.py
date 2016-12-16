@@ -74,7 +74,7 @@ def convert():
             if olivia.backend == 'gpu':
 
 
-                result = react.convert_post_gpu(url_to_id_map)
+                result = react.convert_post_gpu(url_to_id_map, True)
                 image_vectors = {url.split('#')[0]: result['image_vectors'][url]
                                  for url in result['image_vectors'].keys()
                                  if url.split('#')[1] == 'mid'}

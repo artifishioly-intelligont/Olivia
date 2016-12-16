@@ -38,7 +38,7 @@ def convert_post_gpu(url_to_id_map, nsew_mode=False):
         vector = memory.get_vec(id)
         if not vector:
             print "Seen: "+str(url)
-            urls_to_process.add(url)
+            urls_to_process.add(url.split('#')[0])
         else:
             print "NEW: "+str(url)
             image_vectors[url] = vector
@@ -53,8 +53,8 @@ def convert_post_gpu(url_to_id_map, nsew_mode=False):
         for url, vector in data['image_vectors'].items():
             memory.remember_vec(url, vector)
             print "remembering: "+str(url)
+    print "Image Vectors Keys",image_vectors.keys()
     print "--------------------------------------"
-
     return {'success': len(failed_images) == 0,
             'image_vectors': image_vectors,
             'failed_images': failed_images}
