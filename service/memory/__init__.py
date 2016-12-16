@@ -49,6 +49,7 @@ def remember_vec(image_id,attr_vector):
 """
 def clear():
     ret.clear()
+    ret.save()
 
     
 """
