@@ -51,7 +51,7 @@ def convert_post_gpu(url_to_id_map, nsew_mode=False):
 
         # Remember the result of each of these new images
         for url, vector in data['image_vectors'].items():
-            memory.remember_vec(url, vector)
+            memory.remember_vec(url_to_id_map[url], vector)
             print "remembering: "+str(url_to_id_map[url])
     print "Image Vectors Keys",image_vectors.keys()
     print "--------------------------------------"
