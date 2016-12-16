@@ -63,7 +63,13 @@ def convert():
             return json.dumps({'success': False, 'message': 'JSON data not provided'})
         try:
             if olivia.backend == 'gpu':
-                return react.convert_post_gpu_raw(urls)
+                result = react.convert_post_gpu(urls)
+                image_vectors = {url.split('#')[0]: vector for url, vector in result['image_vectors'] if url.split('#')[1] == 'mid'}
+                failed_images = {url.split('#')[0]: vector for url, vector in result['failed_images'] if url.split('#')[1] == 'mid'}
+                result['image_vectors'] = image_vectors
+                result['failed_images'] = failed_images
+                return json.dumps(result)
+
             else:
                 # Stubbed response
                 return json.dumps({'success': False,
@@ -137,7 +143,7 @@ def nsew_convert():
             return json.dumps({'success': False, 'message': 'JSON data not provided'})
         try:
             if olivia.backend == 'gpu':
-                return json.dumps(react.convert_post_gpu_raw(urls, True))
+                return json.dumps(react.convert_post_gpu(urls, True))
             else:
                 # Stubbed response
                 return json.dumps({'success': False,

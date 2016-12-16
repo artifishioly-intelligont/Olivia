@@ -26,6 +26,12 @@ def convert_post_gpu(url_to_id_map, nsew_mode=False):
     print "------[ Converting URLS ]-------"
     print "{} URLs to process".format(len(url_to_id_map))
 
+    if nsew_mode:
+        nsew_urls_to_ids_map = {url+"#"+nsew : id+"#"+nsew
+                                for url, id in url_to_id_map.items()
+                                for nsew in ["NW", "N", "NE", "W", "mid", "E", "SW", "S", "SE"]}
+        url_to_id_map = nsew_urls_to_ids_map
+
     images_to_process = set()
     # Populate the images from knowledge
     for url, id in url_to_id_map.items():
