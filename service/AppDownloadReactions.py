@@ -19,10 +19,6 @@ def download_post(urls, ids):
 
     try:
         data = react.convert_post_gpu_raw(urls, True)
-        print 'data'
-        print 'im vecs',data['image_vectors'].keys()
-        print 'f ims',data['failed_images'].keys()
-        print data['success']
         passed_images = {url.split('#')[0]: data['image_vectors'][url]
                          for url in data['image_vectors'].keys()
                          if url.split('#')[1] == 'mid'}

@@ -57,13 +57,24 @@ def convert():
         return react.convert_get()
 
     elif request.method == 'POST':
-        try:
-            urls = request.get_json()['urls']
-        except TypeError:
+        urls = getListParameter('urls')
+        if not urls:
             return json.dumps({'success': False, 'message': 'JSON data not provided'})
+
+        ids = getParameter('ids')
+        if not ids:
+            ids = []
+
+        if len(ids) == 0:
+            url_to_id_map = downloadReact.create_ids(urls)
+        else:
+            url_to_id_map = zip(urls, urls)
+
         try:
             if olivia.backend == 'gpu':
-                result = react.convert_post_gpu(urls)
+
+
+                result = react.convert_post_gpu(url_to_id_map)
                 image_vectors = {url.split('#')[0]: result['image_vectors'][url]
                                  for url, vector in result['image_vectors']
                                  if url.split('#')[1] == 'mid'}
@@ -143,13 +154,21 @@ def nsew_convert():
         return react.convert_get()
 
     elif request.method == 'POST':
-        try:
-            urls = request.get_json()['urls']
-        except TypeError:
+        urls = getListParameter('urls')
+        if not urls:
             return json.dumps({'success': False, 'message': 'JSON data not provided'})
+
+        ids = getParameter('ids')
+        if not ids:
+            ids = []
+
+        if len(ids) == 0:
+            url_to_id_map = downloadReact.create_ids(urls)
+        else:
+            url_to_id_map = zip(urls, urls)
         try:
             if olivia.backend == 'gpu':
-                return json.dumps(react.convert_post_gpu(urls, True))
+                return json.dumps(react.convert_post_gpu(url_to_id_map, True))
             else:
                 # Stubbed response
                 return json.dumps({'success': False,
