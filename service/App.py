@@ -76,11 +76,11 @@ def convert():
 
                 result = react.convert_post_gpu(url_to_id_map)
                 image_vectors = {url.split('#')[0]: result['image_vectors'][url]
-                                 for url, vector in result['image_vectors']
+                                 for url in result['image_vectors'].keys()
                                  if url.split('#')[1] == 'mid'}
 
                 failed_images = {url.split('#')[0]: result['failed_images'][url]
-                                 for url, vector in result['failed_images']
+                                 for url  in result['failed_images'].keys()
                                  if url.split('#')[1] == 'mid'}
 
                 result['image_vectors'] = image_vectors
