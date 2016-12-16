@@ -9,6 +9,9 @@ def decode_url_sent_from_gui(url):
     url_sections = url.split("/")
     map_id = url_sections[4]
     x_y = url_sections[-1].split(".")[0][:-3]
+    if '#' in url_sections[-1]:
+        direction = url_sections[-1].split('#')[-1]
+        x_y += '#'+direction
     return map_id+"_"+x_y
 
 
