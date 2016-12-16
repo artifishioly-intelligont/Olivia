@@ -59,4 +59,8 @@ def create_ids(urls):
                          "_"+str(random.uniform(1000, 9999))+"_"+str(random.uniform(1000, 9999))
         url_to_decoded_id_map[url] = decoded_id
     return url_to_decoded_id_map
+    
+    
+def clear_memory():
+    memory.clear()
 

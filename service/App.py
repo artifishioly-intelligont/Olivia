@@ -222,6 +222,13 @@ def seen():
 
     else:
         return react.unknown_method('/convert')
+        
+@app.route('/clear')
+def clear():
+    downloadReact.clear_memory()
+    data = { 'success': True }
+    return json.dumps(data)
+        
 
 
 def getListParameter(key):
