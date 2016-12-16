@@ -1,6 +1,7 @@
 import memory
 import random
 import AppConvertReactions as react
+import traceback
 
 
 def download_get():
@@ -18,6 +19,10 @@ def download_post(urls, ids):
 
     try:
         data = react.convert_post_gpu_raw(urls, True)
+        print 'data'
+        print 'im vecs',data['image_vectors'].keys()
+        print 'f ims',data['failed_images'].keys()
+        print data['success']
         passed_images = {url.split('#')[0]: vector for url, vector in data['image_vectors'] if
                          url.split('#')[1] == 'mid'}
         failed_images = {url.split('#')[0]: vector for url, vector in data['failed_images'] if
@@ -25,6 +30,7 @@ def download_post(urls, ids):
 
 
     except Exception as e:
+        traceback.print_exc()
         return {'success': False,
                 'downloaded_vectors': [],
                 'failed_images': {url: e.message for url in urls}}
