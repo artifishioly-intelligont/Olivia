@@ -17,9 +17,12 @@ def download_post(urls, ids):
         url_to_id_map = zip(urls, urls)
 
     try:
-        data = react.convert_post_gpu_raw(urls)
-        passed_images = data["image_vectors"]
-        failed_images = data["failed_images"]
+        data = react.convert_post_gpu_raw(urls, True)
+        passed_images = {url.split('#')[0]: vector for url, vector in data['image_vectors'] if
+                         url.split('#')[1] == 'mid'}
+        failed_images = {url.split('#')[0]: vector for url, vector in data['failed_images'] if
+                         url.split('#')[1] == 'mid'}
+
 
     except Exception as e:
         return {'success': False,
