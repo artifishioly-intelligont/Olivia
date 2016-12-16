@@ -32,20 +32,20 @@ def convert_post_gpu(url_to_id_map, nsew_mode=False):
                                 for nsew in ["NW", "N", "NE", "W", "mid", "E", "SW", "S", "SE"]}
         url_to_id_map = nsew_urls_to_ids_map
 
-    images_to_process = set()
+    urls_to_process = set()
     # Populate the images from knowledge
     for url, id in url_to_id_map.items():
         vector = memory.get_vec(id)
         if not vector:
             print "Seen: "+str(url)
-            images_to_process.add(url)
+            urls_to_process.add(url)
         else:
             print "NEW: "+str(url)
             image_vectors[url] = vector
 
     # If the id is unrecognised, do it now!
-    if len(images_to_process) > 0:
-        data = convert_post_gpu_raw(images_to_process, nsew_mode)
+    if len(urls_to_process) > 0:
+        data = convert_post_gpu_raw(urls_to_process, nsew_mode)
         failed_images = data['failed_images']
         image_vectors.update(data['image_vectors'])
 
