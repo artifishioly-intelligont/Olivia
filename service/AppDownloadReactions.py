@@ -1,7 +1,7 @@
 import memory
 import random
 import AppConvertReactions as react
-import json
+
 
 def download_get():
     return "<h1>Incorrect Usage</h1>\
@@ -10,14 +10,14 @@ def download_get():
 
 
 def download_post(urls, ids):
-    #Genereate the map of ids to urls
+    # Generate the map of ids to urls
     if len(ids) == 0:
         url_to_id_map = create_ids(urls)
     else:
         url_to_id_map = zip(urls, urls)
 
     try:
-        data = react.convert_post_gpu(urls)
+        data = react.convert_post_gpu_raw(urls)
         passed_images = data["image_vectors"]
         failed_images = data["failed_images"]
 

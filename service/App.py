@@ -63,7 +63,7 @@ def convert():
             return json.dumps({'success': False, 'message': 'JSON data not provided'})
         try:
             if olivia.backend == 'gpu':
-                return react.convert_post_gpu(urls)
+                return react.convert_post_gpu_raw(urls)
             else:
                 # Stubbed response
                 return json.dumps({'success': False,
@@ -137,7 +137,7 @@ def nsew_convert():
             return json.dumps({'success': False, 'message': 'JSON data not provided'})
         try:
             if olivia.backend == 'gpu':
-                return json.dumps(react.convert_post_gpu(urls, True))
+                return json.dumps(react.convert_post_gpu_raw(urls, True))
             else:
                 # Stubbed response
                 return json.dumps({'success': False,
@@ -184,7 +184,7 @@ def seen():
         if 'urls' in request.get_json():
             urls = request.get_json()['urls']
 
-            data = { 'seen' : {}}
+            data = {'seen': {}}
             for url in urls:
                 id = memory.decode_url_sent_from_gui(url)
                 data['seen'][url] = not not memory.get_vec(id)

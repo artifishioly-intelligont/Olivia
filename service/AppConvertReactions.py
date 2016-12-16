@@ -1,5 +1,8 @@
 import json
+from collections import Set
+
 import olivia
+import memory
 import tools
 from tools import DownloadException
 
@@ -15,7 +18,43 @@ def convert_get():
     <br>POST expects a number of files to be sent to it"
 
 
-def convert_post_gpu(urls, nsew_mode=False):
+def convert_post_gpu(url_to_id_map, nsew_mode=False):
+    """ Given a list of urls it returns the vectors from memory or direct processing """
+    image_vectors = {}
+    failed_images = {}
+
+    print "------[ Converting URLS ]-------"
+    print "{} URLs to process".format(len(url_to_id_map))
+
+    images_to_process = set()
+    # Populate the images from knowledge
+    for url, id in url_to_id_map.items():
+        vector = memory.get_vec(id)
+        if not vector:
+            print "Seen: "+str(url)
+            images_to_process.add(url)
+        else:
+            print "NEW: "+str(url)
+            image_vectors[url] = vector
+
+    # If the id is unrecognised, do it now!
+    if len(images_to_process) > 0:
+        data = convert_post_gpu_raw(images_to_process, nsew_mode)
+        failed_images = data['failed_images']
+        image_vectors.update(data['image_vectors'])
+
+        # Remember the result of each of these new images
+        for url, vector in data['image_vectors'].items():
+            memory.remember_vec(url, vector)
+            print "remembering: "+str(url)
+    print "--------------------------------------"
+
+    return {'success': len(failed_images) == 0,
+            'image_vectors': image_vectors,
+            'failed_images': failed_images}
+
+
+def convert_post_gpu_raw(urls, nsew_mode=False):
     """
     :param urls -- an array of remote urls of the images that we want to convert into vectorsg
     :param nsew_mode -- Extract 9 vectors from one image
@@ -51,8 +90,8 @@ def convert_post_gpu(urls, nsew_mode=False):
     # Ensure we have at least 1 image to process
     if len(local_urls_to_remote_urls) == 0:
         return {'success': False,
-             'image_vectors': {},
-             'failed_images': failed_remote_urls}
+                'image_vectors': {},
+                'failed_images': failed_remote_urls}
 
     # Batch them up in the size stored in 'olivia.cores'
     local_url_paths = local_urls_to_remote_urls.keys()
