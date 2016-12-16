@@ -158,14 +158,12 @@ def download():
         return downloadReact.download_get()
 
     elif request.method == 'POST':
-        if 'urls' in request.get_json():
-            urls = request.get_json()['urls']
-        else:
+        urls = getListParameter('urls')
+        if not urls:
             return json.dumps({'success': False, 'message': 'JSON data not provided'})
 
-        if 'ids' in request.get_json():
-            ids = request.get_json()['ids']
-        else:
+        ids = getParameter('ids')
+        if not ids:
             ids = []
 
         return json.dumps(downloadReact.download_post(urls, ids))
@@ -181,19 +179,39 @@ def seen():
         return downloadReact.download_get()
 
     elif request.method == 'POST':
-        if 'urls' in request.get_json():
-            urls = request.get_json()['urls']
-
-            data = {'seen': {}}
-            for url in urls:
-                id = memory.decode_url_sent_from_gui(url)
-                data['seen'][url] = not not memory.get_vec(id)
-            return json.dumps(data)
-        else:
+        urls = getListParameter('urls')
+        if not urls:
             return json.dumps({'success': False, 'message': 'JSON data not provided'})
+
+        data = {'seen': {}}
+        for url in urls:
+            id = memory.decode_url_sent_from_gui(url)
+            data['seen'][url] = not not memory.get_vec(id)
+        return json.dumps(data)
 
     else:
         return react.unknown_method('/convert')
+
+
+def getListParameter(key):
+    if request.get_json() and key in request.get_json():
+        return request.get_json()[key]
+    elif request.form and key in request.form:
+        raw_list = request.form[key].split(';')
+        if '' in raw_list:
+            raw_list.remove('')
+        return raw_list
+    else:
+        return False
+
+
+def getParameter(key):
+    if request.get_json() and key in request.get_json():
+        return request.get_json()[key]
+    elif request.form and key in request.form:
+        return request.form[key]
+    else:
+        return False
 
 
 def handleFailure(message, urls):

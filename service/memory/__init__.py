@@ -21,7 +21,7 @@ def get_vec(image_id):
 
 """
 :function
-        remember
+        remember_vec
 :param  
         image_id: A string in the format '<map_id>_<x>_<y>'
            e.g. '10_2_3' would mean 'Map 10, tile coordinates (2,3)'
@@ -33,7 +33,7 @@ def get_vec(image_id):
         Takes a matching image id and attribute vector, and stores them
         in a csv file, so that image doesn't need to be processed again
 """
-def remember(image_id,attr_vector):
+def remember_vec(image_id,attr_vector):
     ret.remember_vec(image_id,attr_vector)
 
     
