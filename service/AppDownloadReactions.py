@@ -23,10 +23,13 @@ def download_post(urls, ids):
         print 'im vecs',data['image_vectors'].keys()
         print 'f ims',data['failed_images'].keys()
         print data['success']
-        passed_images = {url.split('#')[0]: vector for url, vector in data['image_vectors'] if
-                         url.split('#')[1] == 'mid'}
-        failed_images = {url.split('#')[0]: vector for url, vector in data['failed_images'] if
-                         url.split('#')[1] == 'mid'}
+        passed_images = {url.split('#')[0]: data['image_vectors'][url]
+                         for url in data['image_vectors'].keys()
+                         if url.split('#')[1] == 'mid'}
+
+        failed_images = {url.split('#')[0]: data['image_vectors'][url]
+                         for url in data['failed_images'].keys()
+                         if url.split('#')[1] == 'mid'}
 
 
     except Exception as e:
