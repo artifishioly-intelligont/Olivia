@@ -7,7 +7,7 @@ backend = 'cpu'
 cores = 1
 if socket.gethostname() == 'myrtle':
     backend = 'gpu'
-    cores = 128
+    cores = 32
 
 converter = Vectorizer(backend=backend, cores=cores)
 
