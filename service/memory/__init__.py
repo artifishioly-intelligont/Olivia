@@ -20,7 +20,7 @@ def get_vec(image_id):
 
     seen = not not vec
     seen_text = 'seen' if seen else 'nope'
-    print "[", seen_text, "]Asking for ", image_id
+    print "[", seen_text, "] Asking for ", image_id
 
     return ret.get_vec(image_id)
 
