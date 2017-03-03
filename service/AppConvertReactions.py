@@ -111,7 +111,13 @@ def convert_post_gpu_raw(urls, nsew_mode=False):
 
         # Vectorize the images at the local urls
         if nsew_mode:
-            vectorized_local_urls, failed_local_urls = olivia.get_vecs_with_NSEW(local_url_batch)
+            try:
+                vectorized_local_urls, failed_local_urls = olivia.get_vecs_with_NSEW(local_url_batch)
+            except Exception as e:
+                print "Error: ",e.message
+                print "URLS[",startIndex,":",endIndex,"/",len(urls),"]:"
+                for url in local_url_batch:
+                    print url
             # Update the successfully vectorized urls
             for local_url_with_direction in vectorized_local_urls:
                 local_url = local_url_with_direction.split("#")[0]

@@ -231,7 +231,7 @@ class Vectorizer:
         image_width = im.shape[1]
         image_height = im.shape[0]
 
-        x_remainder = image_width - 2 * int(self.patch_width / 2.0)
+        x_remainder = image_width - 2 * int(self.patch_width / 2.0) # makes it even
         y_remainder = image_height - 2 * int(self.patch_height / 2.0)
 
         # Determine the width of the horiz and vertical borders
@@ -242,8 +242,6 @@ class Vectorizer:
         north_y = 0
         mid_y = y_remainder / 2
         south_y = image_height - self.patch_height
-
-        print image_width
 
         # Describe the position of the image (based on its top left point of the patch)
         # Assuming [0,0] is the top left point in the whole image
@@ -261,6 +259,7 @@ class Vectorizer:
                    '#S': [mid_x, south_y],
                    '#SE': [east_x, south_y],
                    }
+
         patch_array_dict = {}
         for direction, coord in factors.items():
             top = coord[1]
