@@ -251,7 +251,7 @@ def getParameter(key):
 
 
 def handleFailure(message, urls):
-    #traceback.print_exc()
+    traceback.print_exc()
 
     failed_images = {}
     for url in urls:
