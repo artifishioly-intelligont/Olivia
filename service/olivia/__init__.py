@@ -9,22 +9,17 @@ if socket.gethostname() == 'myrtle':
     backend = 'gpu'
     cores = 16
 
+converter = Vectorizer(backend=backend, cores=cores)
 
 
 def get_attr_vec(img_path):
-    converter = Vectorizer(backend=backend, cores=cores)
-
     vec = converter.get_attribute_vector(img_path)
     return vec.tolist()
 
 
 def get_all_vecs(img_paths):
-    converter = Vectorizer(backend=backend, cores=cores)
-
     return converter.get_batch_attribute_vectors(img_path_array=img_paths)
 
 
 def get_vecs_with_NSEW(img_paths):
-    converter = Vectorizer(backend=backend, cores=cores)
-
     return converter.get_NSEW_batch_attribute_vectors(img_path_array=img_paths)
