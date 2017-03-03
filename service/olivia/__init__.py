@@ -7,7 +7,7 @@ backend = 'cpu'
 cores = 1
 if socket.gethostname() == 'myrtle':
     backend = 'gpu'
-    cores = 32
+    cores = 16
 
 
 
