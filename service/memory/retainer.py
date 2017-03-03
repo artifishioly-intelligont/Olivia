@@ -122,14 +122,12 @@ class Retainer:
     """
     def save(self):
         data = deepcopy(self.ids_to_vectors)
-        print data
-        
+
         # Save it locally
         with open(self.csv_file, 'wb') as f:
             wtr = csv.writer(f, delimiter= ',')
             for id, vec in data.items():
-                print [id] + list(vec)
-                wtr.writerow([id] + list(vec))        
+                wtr.writerow([id] + list(vec))
         
     """
     Auxiliary function for checking if an image has already been processed

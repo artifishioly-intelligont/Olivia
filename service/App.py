@@ -80,7 +80,7 @@ def convert():
                                  if url.split('#')[1] == 'mid'}
 
                 failed_images = {url.split('#')[0]: result['failed_images'][url]
-                                 for url  in result['failed_images'].keys()
+                                 for url in result['failed_images'].keys()
                                  if url.split('#')[1] == 'mid'}
 
                 result['image_vectors'] = image_vectors
