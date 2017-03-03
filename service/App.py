@@ -73,7 +73,6 @@ def convert():
         try:
             if olivia.backend == 'gpu':
 
-
                 result = react.convert_post_gpu(url_to_id_map, True)
                 image_vectors = {url.split('#')[0]: result['image_vectors'][url]
                                  for url in result['image_vectors'].keys()
@@ -93,7 +92,6 @@ def convert():
                                    'image_vectors': {urls[0]: [0.666] * 1024},
                                    'failed_images': {url: 'This is stubbed, everything is a lie' for url in urls[1:]}})
         except (Exception, BaseException) as ex:
-            traceback.print_exc()
             return handleFailure(ex.message, urls)
     else:
         return react.unknown_method('/convert')
@@ -253,7 +251,7 @@ def getParameter(key):
 
 
 def handleFailure(message, urls):
-    traceback.print_exc()
+    #traceback.print_exc()
 
     failed_images = {}
     for url in urls:
@@ -261,6 +259,7 @@ def handleFailure(message, urls):
     data = {'success': False,
             'image_vectors': {},
             'failed_images': failed_images}
+    print data
     return json.dumps(data)
 
 

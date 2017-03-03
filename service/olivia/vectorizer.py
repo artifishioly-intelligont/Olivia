@@ -243,6 +243,8 @@ class Vectorizer:
         mid_y = y_remainder / 2
         south_y = image_height - self.patch_height
 
+        print image_width
+
         # Describe the position of the image (based on its top left point of the patch)
         # Assuming [0,0] is the top left point in the whole image
         factors = {
