@@ -79,8 +79,9 @@ def convert():
                     print key.split('actual_files')[1]
 
                 print "---------[Failed Images:",len(result['failed_images'].keys())," ]----------"
-                for key in result['failed_images'].keys():
-                    print key.split('actual_files')[1]
+                for key, msg in result['failed_images'].items():
+                    print "---[",key.split('actual_files')[1],"]---"
+                    print msg
 
 
                 image_vectors = {url.split('#')[0]: result['image_vectors'][url]
