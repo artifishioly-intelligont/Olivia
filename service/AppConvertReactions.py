@@ -118,6 +118,8 @@ def convert_post_gpu_raw(urls, nsew_mode=False):
                 print "URLS[",startIndex,":",endIndex,"/",len(urls),"]:"
                 for url in local_url_batch:
                     print url
+                raise e
+
             # Update the successfully vectorized urls
             for local_url_with_direction in vectorized_local_urls:
                 local_url = local_url_with_direction.split("#")[0]
