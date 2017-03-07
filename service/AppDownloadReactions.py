@@ -19,14 +19,6 @@ def download_post(urls, ids):
 
     try:
         data = react.convert_post_gpu_raw(urls, True)
-        passed_images = {url.split('#')[0]: data['image_vectors'][url]
-                         for url in data['image_vectors'].keys()
-                         if url.split('#')[1] == 'mid'}
-
-        failed_images = {url.split('#')[0]: data['failed_images'][url]
-                         for url in data['failed_images'].keys()
-                         if url.split('#')[1] == 'mid'}
-
 
     except Exception as e:
         traceback.print_exc()
@@ -34,10 +26,18 @@ def download_post(urls, ids):
                 'downloaded_vectors': [],
                 'failed_images': {url: e.message for url in urls}}
 
-    for url, vector in passed_images.items():
+    for url, vector in data['image_vectors'].items():
         image_id = url_to_id_map[url]
         print url, image_id, vector[0:3]
         memory.remember_vec(image_id, vector)
+
+    passed_images = {url.split('#')[0]: data['image_vectors'][url]
+                         for url in data['image_vectors'].keys()
+                         if url.split('#')[1] == 'mid'}
+
+    failed_images = {url.split('#')[0]: data['failed_images'][url]
+                        for url in data['failed_images'].keys()
+                        if url.split('#')[1] == 'mid'}
 
     data = {'success': len(failed_images) == 0,
             'downloaded_vectors': passed_images.keys(),
