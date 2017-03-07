@@ -32,7 +32,7 @@ def convert_post_gpu(url_to_id_map, nsew_mode=False):
     urls_to_process = set()
     # Populate the images from knowledge
     for url, id in url_to_id_map.items():
-        vector = memory.get_vec(id)
+        vector = memory.get_vec(id) # If we have seen it before
         if not vector:
             urls_to_process.add(url.split('#')[0])
         else:
