@@ -74,14 +74,16 @@ def convert():
             if olivia.backend == 'gpu':
 
                 result = react.convert_post_gpu(url_to_id_map, True)
-                print "---------[Passed Images:", len(result['image_vectors'].keys())," ]----------"
-                for key in result['image_vectors'].keys():
-                    print key.split('actual_files')[1]
 
-                print "---------[Failed Images:", len(result['failed_images'].keys())," ]----------"
-                for key, msg in result['failed_images'].items():
-                    print "---[", key.split('actual_files')[1], "]---"
-                    print msg
+                if len(result['failed_images'].keys()) > 0:
+                    print "---------[Passed Images:", len(result['image_vectors'].keys())," ]----------"
+                    for key in result['image_vectors'].keys():
+                        print key.split('actual_files')[1]
+
+                    print "---------[Failed Images:", len(result['failed_images'].keys())," ]----------"
+                    for key, msg in result['failed_images'].items():
+                        print "---[", key.split('actual_files')[1], "]---"
+                        print msg
 
                 image_vectors = {url.split('#')[0]: result['image_vectors'][url]
                                  for url in result['image_vectors'].keys()
